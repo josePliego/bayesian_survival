@@ -1,6 +1,11 @@
+*.blg
+*.bbl
+*.tex
+*.bib
 .~*
 *.pdf
 *.log
 *.aux
 *.gz
 README.html
+.Rproj.user
