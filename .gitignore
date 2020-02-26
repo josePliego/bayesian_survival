@@ -1,3 +1,5 @@
+docs/
+*.f90
 *.blg
 *.bbl
 *.tex
