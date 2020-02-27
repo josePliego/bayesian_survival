@@ -7,4 +7,3 @@
 3. Investigar y escribir sobre cópulas.
 4. Verificar los cálculos de cópulas del artículo.
 5. Investigar y escribir de modelos frailty.
-
