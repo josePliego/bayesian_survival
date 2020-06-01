@@ -57,6 +57,12 @@ theta_hat2 <- mean(exito) * 32
 print(theta_hat2)
 print(abs(theta_hat2 - 0.2*32))
 
+png(filename = "graphs/sim_hx.png",
+    width = 10,
+    height = 7,
+    units = "cm",
+    res = 300)
+
 plot(x,
      y,
      col = alpha(if_else(y <= g(x), "steelblue", "gainsboro"), 0.5),
@@ -68,5 +74,35 @@ curve(g(x),
       col = "black",
       add = TRUE,
       lwd = 2)
+
+dev.off()
+
+dev.off()
+
+curve(g(x),
+      from = 0,
+      to = 2, 
+      col = "black",
+      add = FALSE,
+      lwd = 2,
+      ylab = "h(x)")
+
+png(filename = "graphs/hx.png",
+    width = 10,
+    height = 7,
+    units = "cm",
+    res = 300)
+curve(g(x),
+      from = 0,
+      to = 2, 
+      col = "black",
+      add = FALSE,
+      lwd = 2,
+      ylab = "h(x)",
+      xlim = c(0, 2),
+      ylim = c(0, 17))
+dev.off()
+
+ggplot2::ggsave("graphs/hx.png", width = 10, height = 7, units = "cm")
 
 
