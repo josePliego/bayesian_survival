@@ -1,0 +1,1138 @@
+---
+title: "Prueba del algoritmo"
+author: "José Pliego San Martín"
+date: "7/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r preamble, include=FALSE, message=FALSE, results='hide'}
+library(tidyverse)
+library(coda)
+
+out <- read_rds("cache/out_v1.rds")
+```
+
+## Datos
+
+Para ejemplificar el modelo, se utilizan los datos del artículo original, disponibles en el paquete \texttt{survival}. Se corrieron 4 cadenas independientes de 5000 iteraciones cada una. Ahora exploremos los resultados obtenidos.
+
+### $\omega_1$
+
+```{r omega1, include = F}
+omega1 <- list()
+
+for (i in seq_along(out)) {
+  omega1[[paste0("chain.", i)]] <- out[[i]]$omega1
+}
+
+names(omega1$chain.1) <- paste0("iter.", 1:5000)
+names(omega1$chain.2) <- paste0("iter.", 1:5000)
+names(omega1$chain.3) <- paste0("iter.", 1:5000)
+names(omega1$chain.4) <- paste0("iter.", 1:5000)
+
+o1c1 <- omega1$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 1
+    )
+
+o1c2 <- omega1$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 2
+  )
+
+o1c3 <- omega1$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 3
+  )
+
+o1c4 <- omega1$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 4
+  )
+
+omega1_tib <- bind_rows(
+  o1c1, o1c2, o1c3, o1c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada individuo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+omega1_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+omega1_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+omega1_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $\omega_2$
+
+```{r omega2, include = F, fig.height = 15, fig.width = 15}
+omega2 <- list()
+
+for (i in seq_along(out)) {
+  omega2[[paste0("chain.", i)]] <- out[[i]]$omega2
+}
+
+names(omega2$chain.1) <- paste0("iter.", 1:5000)
+names(omega2$chain.2) <- paste0("iter.", 1:5000)
+names(omega2$chain.3) <- paste0("iter.", 1:5000)
+names(omega2$chain.4) <- paste0("iter.", 1:5000)
+
+o2c1 <- omega2$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 1
+    )
+
+o2c2 <- omega2$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 2
+  )
+
+o2c3 <- omega2$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 3
+  )
+
+o2c4 <- omega2$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 4
+  )
+
+omega2_tib <- bind_rows(
+  o2c1, o2c2, o2c3, o2c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada individuo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+omega2_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+omega2_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+omega2_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $y$
+
+```{r y, include = F, fig.height = 15, fig.width = 15}
+y <- list()
+
+for (i in seq_along(out)) {
+  y[[paste0("chain.", i)]] <- out[[i]]$y
+}
+
+names(y$chain.1) <- paste0("iter.", 1:5000)
+names(y$chain.2) <- paste0("iter.", 1:5000)
+names(y$chain.3) <- paste0("iter.", 1:5000)
+names(y$chain.4) <- paste0("iter.", 1:5000)
+
+yc1 <- y$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 1
+    )
+
+yc2 <- y$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 2
+  )
+
+yc3 <- y$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 3
+  )
+
+yc4 <- y$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 4
+  )
+
+y_tib <- bind_rows(
+  yc1, yc2, yc3, yc4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada individuo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+y_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+y_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+y_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $u_1$
+
+```{r u1, include = F, fig.height = 15, fig.width = 15}
+u1 <- list()
+
+for (i in seq_along(out)) {
+  u1[[paste0("chain.", i)]] <- out[[i]]$u1
+}
+
+names(u1$chain.1) <- paste0("iter.", 1:5000)
+names(u1$chain.2) <- paste0("iter.", 1:5000)
+names(u1$chain.3) <- paste0("iter.", 1:5000)
+names(u1$chain.4) <- paste0("iter.", 1:5000)
+
+u1c1 <- u1$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 1
+    )
+
+u1c2 <- u1$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 2
+  )
+
+u1c3 <- u1$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 3
+  )
+
+u1c4 <- u1$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 4
+  )
+
+u1_tib <- bind_rows(
+  u1c1, u1c2, u1c3, u1c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada intervalo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+u1_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+u1_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+u1_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $u_2$
+
+```{r u2, include = F, fig.height = 15, fig.width = 15}
+u2 <- list()
+
+for (i in seq_along(out)) {
+  u2[[paste0("chain.", i)]] <- out[[i]]$u2
+}
+
+names(u2$chain.1) <- paste0("iter.", 1:5000)
+names(u2$chain.2) <- paste0("iter.", 1:5000)
+names(u2$chain.3) <- paste0("iter.", 1:5000)
+names(u2$chain.4) <- paste0("iter.", 1:5000)
+
+u2c1 <- u2$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 1
+    )
+
+u2c2 <- u2$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 2
+  )
+
+u2c3 <- u2$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 3
+  )
+
+u2c4 <- u2$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 4
+  )
+
+u2_tib <- bind_rows(
+  u2c1, u2c2, u2c3, u2c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada intervalo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+u2_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+u2_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+u2_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $\lambda_1$
+
+```{r lambda1, include = F, fig.height = 15, fig.width = 15}
+lambda1 <- list()
+
+for (i in seq_along(out)) {
+  lambda1[[paste0("chain.", i)]] <- out[[i]]$lambda1
+}
+
+names(lambda1$chain.1) <- paste0("iter.", 1:5000)
+names(lambda1$chain.2) <- paste0("iter.", 1:5000)
+names(lambda1$chain.3) <- paste0("iter.", 1:5000)
+names(lambda1$chain.4) <- paste0("iter.", 1:5000)
+
+lambda1c1 <- lambda1$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 1
+    )
+
+lambda1c2 <- lambda1$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 2
+  )
+
+lambda1c3 <- lambda1$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 3
+  )
+
+lambda1c4 <- lambda1$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 4
+  )
+
+lambda1_tib <- bind_rows(
+  lambda1c1, lambda1c2, lambda1c3, lambda1c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada intervalo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+lambda1_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+lambda1_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+lambda1_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $\lambda_2$
+
+```{r lambda2, include = F, fig.height = 15, fig.width = 15}
+lambda2 <- list()
+
+for (i in seq_along(out)) {
+  lambda2[[paste0("chain.", i)]] <- out[[i]]$lambda2
+}
+
+names(lambda2$chain.1) <- paste0("iter.", 1:5000)
+names(lambda2$chain.2) <- paste0("iter.", 1:5000)
+names(lambda2$chain.3) <- paste0("iter.", 1:5000)
+names(lambda2$chain.4) <- paste0("iter.", 1:5000)
+
+lambda2c1 <- lambda2$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 1
+    )
+
+lambda2c2 <- lambda2$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 2
+  )
+
+lambda2c3 <- lambda2$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 3
+  )
+
+lambda2c4 <- lambda2$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:57,
+    chain = 4
+  )
+
+lambda2_tib <- bind_rows(
+  lambda2c1, lambda2c2, lambda2c3, lambda2c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada intervalo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+lambda2_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+lambda2_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+lambda2_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $t_1$
+
+```{r t1, include = F, fig.height = 15, fig.width = 15}
+t1 <- list()
+
+for (i in seq_along(out)) {
+  t1[[paste0("chain.", i)]] <- out[[i]]$t1
+}
+
+names(t1$chain.1) <- paste0("iter.", 1:5000)
+names(t1$chain.2) <- paste0("iter.", 1:5000)
+names(t1$chain.3) <- paste0("iter.", 1:5000)
+names(t1$chain.4) <- paste0("iter.", 1:5000)
+
+t1c1 <- t1$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 1
+    )
+
+t1c2 <- t1$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 2
+  )
+
+t1c3 <- t1$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 3
+  )
+
+t1c4 <- t1$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 4
+  )
+
+t1_tib <- bind_rows(
+  t1c1, t1c2, t1c3, t1c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada individuo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+t1_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+t1_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+t1_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $t_2$
+
+```{r t2, include = F, fig.height = 15, fig.width = 15}
+t2 <- list()
+
+for (i in seq_along(out)) {
+  t2[[paste0("chain.", i)]] <- out[[i]]$t2
+}
+
+names(t2$chain.1) <- paste0("iter.", 1:5000)
+names(t2$chain.2) <- paste0("iter.", 1:5000)
+names(t2$chain.3) <- paste0("iter.", 1:5000)
+names(t2$chain.4) <- paste0("iter.", 1:5000)
+
+t2c1 <- t2$chain.1 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 1
+    )
+
+t2c2 <- t2$chain.2 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 2
+  )
+
+t2c3 <- t2$chain.3 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 3
+  )
+
+t2c4 <- t2$chain.4 %>%
+  as_tibble() %>%
+  mutate(
+    individuo = 1:38,
+    chain = 4
+  )
+
+t2_tib <- bind_rows(
+  t2c1, t2c2, t2c3, t2c4
+) %>%
+  pivot_longer(cols = iter.1:iter.5000, names_to = "t", values_to = "obs") %>%
+  separate(t, into = c("iter", "t"), sep = "\\.") %>%
+  mutate(t = as.double(t))
+```
+
+Veamos primero los *trace plots* de cada individuo.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+t2_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.5) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+t2_tib %>%
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 15, fig.width = 15}
+t2_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(individuo, chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  facet_wrap(~ individuo, scales = "free_y") +
+  theme(legend.position = "none")
+```
+
+### $\theta$
+
+```{r theta, include = F, fig.height = 15, fig.width = 15}
+theta <- list()
+
+for (i in seq_along(out)) {
+  theta[[paste0("chain.", i)]] <- out[[i]]$theta
+}
+
+names(theta$chain.1) <- paste0("iter.", 1:5000)
+names(theta$chain.2) <- paste0("iter.", 1:5000)
+names(theta$chain.3) <- paste0("iter.", 1:5000)
+names(theta$chain.4) <- paste0("iter.", 1:5000)
+
+thetac1 <- tibble(
+  obs = unlist(theta$chain.1),
+  chain = "1"
+  )
+
+thetac2 <- tibble(
+  obs = unlist(theta$chain.2),
+  chain = "2"
+  )
+
+thetac3 <- tibble(
+  obs = unlist(theta$chain.3),
+  chain = "3"
+  )
+
+thetac4 <- tibble(
+  obs = unlist(theta$chain.4),
+  chain = "4"
+  )
+
+theta_tib <- bind_rows(
+  thetac1, thetac2, thetac3, thetac4
+) %>%
+  mutate(t = rep(1:5000, times = 4))
+```
+
+Veamos primero los *trace plots*.
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 8}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+theta_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.8) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 8}
+theta_tib %>%
+  group_by(chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 8}
+theta_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+### $\gamma$
+
+```{r gamma, include = F, fig.height = 15, fig.width = 15}
+gamma <- list()
+
+for (i in seq_along(out)) {
+  gamma[[paste0("chain.", i)]] <- out[[i]]$gamma
+}
+
+names(gamma$chain.1) <- paste0("iter.", 1:5000)
+names(gamma$chain.2) <- paste0("iter.", 1:5000)
+names(gamma$chain.3) <- paste0("iter.", 1:5000)
+names(gamma$chain.4) <- paste0("iter.", 1:5000)
+
+gammac1 <- tibble(
+  obs = unlist(gamma$chain.1),
+  chain = "1"
+  )
+
+gammac2 <- tibble(
+  obs = unlist(gamma$chain.2),
+  chain = "2"
+  )
+
+gammac3 <- tibble(
+  obs = unlist(gamma$chain.3),
+  chain = "3"
+  )
+
+gammac4 <- tibble(
+  obs = unlist(gamma$chain.4),
+  chain = "4"
+  )
+
+gamma_tib <- bind_rows(
+  gammac1, gammac2, gammac3, gammac4
+) %>%
+  mutate(t = rep(1:5000, times = 4))
+```
+
+Veamos primero los *trace plots* de cada intervalo.
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 8}
+colores <- c("1" = "#172744", "2" = "#3077B2", "3" = "#6B0C1A", "4" = "#DF2A35")
+
+gamma_tib %>%
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line(alpha = 0.8) +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Ahora las medias ergódicas.
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 8}
+gamma_tib %>%
+  group_by(chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Veamos cómo se ven las medias ergódicas con un periodo de burn in de 1000 iteraciones.
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 8}
+gamma_tib %>%
+  mutate(t = t - 1000) %>%
+  filter(t >= 1) %>% 
+  group_by(chain) %>%
+  mutate(obs = cumsum(obs)) %>%
+  ungroup() %>%
+  mutate(obs = obs / t) %>% 
+  ggplot(aes(x = t, y = obs, color = as.character(chain))) +
+  geom_line() +
+  scale_color_manual(values = colores) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Effective Sample Size
+
+```{r, warning=F}
+omega1_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+omega2_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+y_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+u1_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+u2_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+lambda1_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+lambda2_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+theta_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```
+
+```{r, warning=F}
+gamma_tib %>%
+  group_by(chain) %>%
+  summarise(ess = effectiveSize(obs)) %>%
+  ungroup()
+```

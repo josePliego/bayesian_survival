@@ -1,9 +1,7 @@
-docs/
 *.f90
+*.f
 *.blg
 *.bbl
-*.tex
-*.bib
 .~*
 *.pdf
 *.log
@@ -11,3 +9,6 @@ docs/
 *.gz
 README.html
 .Rproj.user
+.Rhistory
+*.lof
+*.toc
