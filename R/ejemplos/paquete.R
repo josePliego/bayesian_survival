@@ -1,44 +1,49 @@
-library(BSBHaz)
+# library(BSBHaz)
 library(tidyverse)
 library(latex2exp)
 library(patchwork)
 
-bsb_init1 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 42)
-out1 <- bsbhaz_sample(
-  bsb_init1,
-  iter = 50000,
-  burn_in = 5000,
-  gamma_d = 50, 
-  theta_d = 0.3, 
-  seed = 42
-)
-bsb_init2 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 43)
-out2 <- bsbhaz_sample(
-  bsb_init2,
-  iter = 50000,
-  burn_in = 5000,
-  gamma_d = 50, 
-  theta_d = 0.3, 
-  seed = 43
-)
-bsb_init3 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 44)
-out3 <- bsbhaz_sample(
-  bsb_init3,
-  iter = 50000,
-  burn_in = 5000,
-  gamma_d = 50, 
-  theta_d = 0.3, 
-  seed = 44
-)
-bsb_init4 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 45)
-out4 <- bsbhaz_sample(
-  bsb_init4,
-  iter = 50000,
-  burn_in = 5000,
-  gamma_d = 50, 
-  theta_d = 0.3, 
-  seed = 45
-)
+# bsb_init1 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 42)
+# out1 <- bsbhaz_sample(
+#   bsb_init1,
+#   iter = 50000,
+#   burn_in = 5000,
+#   gamma_d = 50, 
+#   theta_d = 0.3, 
+#   seed = 42
+# )
+# bsb_init2 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 43)
+# out2 <- bsbhaz_sample(
+#   bsb_init2,
+#   iter = 50000,
+#   burn_in = 5000,
+#   gamma_d = 50, 
+#   theta_d = 0.3, 
+#   seed = 43
+# )
+# bsb_init3 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 44)
+# out3 <- bsbhaz_sample(
+#   bsb_init3,
+#   iter = 50000,
+#   burn_in = 5000,
+#   gamma_d = 50, 
+#   theta_d = 0.3, 
+#   seed = 44
+# )
+# bsb_init4 <- bsbhaz_initial_setup(KIDNEY, part_len = 10, seed = 45)
+# out4 <- bsbhaz_sample(
+#   bsb_init4,
+#   iter = 50000,
+#   burn_in = 5000,
+#   gamma_d = 50, 
+#   theta_d = 0.3, 
+#   seed = 45
+# )
+
+out1 <- read_rds("cache/samples1_v2.rds")
+out2 <- read_rds("cache/samples2_v2.rds")
+out3 <- read_rds("cache/samples3_v2.rds")
+out4 <- read_rds("cache/samples4_v2.rds")
 
 
 # Theta -------------------------------------------------------------------
@@ -53,7 +58,7 @@ theta <- tibble(
   chain3 = out3$theta[1, ],
   chain4 = out4$theta[1, ]
   ) %>%
-  mutate(t = 1:45000) %>%
+  mutate(t = 1:40000) %>%
   pivot_longer(cols = -t)
 
 ggplot(theta, aes(x = t, y = value, color = name)) +
@@ -78,7 +83,7 @@ ggplot(theta, aes(x = value, color = name)) +
 
 theta %>%
   group_by(name) %>%
-  mutate(value = cumsum(value) / 1:45000) %>%
+  mutate(value = cumsum(value) / 1:40000) %>%
   ungroup() %>%
   ggplot(aes(x = t, y = value, color = name)) +
   geom_line(size = 0.7) +
@@ -88,6 +93,7 @@ theta %>%
   theme_bw() +
   theme(panel.grid = element_blank(),
         legend.title = element_blank()) +
+  ylim(c(-0.5, 1.5)) +
   ggsave("graphs/theta_ergodic_means.png", width = 14, height = 10, units = "cm")
 
 
@@ -103,7 +109,7 @@ gamma <- tibble(
   chain3 = out3$gamma[1, ],
   chain4 = out4$gamma[1, ]
 ) %>%
-  mutate(t = 1:45000) %>%
+  mutate(t = 1:40000) %>%
   pivot_longer(cols = -t)
 
 ggplot(gamma, aes(x = t, y = value, color = name)) +
@@ -129,7 +135,7 @@ ggplot(gamma, aes(x = value, color = name)) +
 
 gamma %>%
   group_by(name) %>%
-  mutate(value = cumsum(value) / 1:45000) %>%
+  mutate(value = cumsum(value) / 1:40000) %>%
   ungroup() %>%
   ggplot(aes(x = t, y = value, color = name)) +
   geom_line(size = 0.7) +
@@ -139,14 +145,15 @@ gamma %>%
   theme_bw() +
   theme(panel.grid = element_blank(),
         legend.title = element_blank()) +
+  ylim(c(0, 10)) +
   ggsave("graphs/gamma_ergodic_means.png", width = 14, height = 10, units = "cm")
 
 
 # Frailties ---------------------------------------------------------------
 
-frailties_chain1 <- bsbhaz_get_summaries(out1, "omega1") %>%
+frailties_chain1 <- BGPhazard::BSBSumm(out1, "omega1") %>%
   select(ind = Individual, omega1 = Mean) %>%
-  left_join(bsbhaz_get_summaries(out1, "omega2") %>%
+  left_join(BGPhazard::BSBSumm(out1, "omega2") %>%
               select(ind = Individual, omega2 = Mean), by = "ind") %>%
   ggplot(aes(x = ind, y = omega1)) +
   geom_segment(aes(xend = ind, yend = omega2), color = "dodgerblue1", size = 0.7) +
@@ -159,9 +166,9 @@ frailties_chain1 <- bsbhaz_get_summaries(out1, "omega1") %>%
   theme_bw() +
   theme(panel.grid.minor = element_blank(), legend.position = "none")
 
-frailties_chain2 <- bsbhaz_get_summaries(out2, "omega1") %>%
+frailties_chain2 <- BGPhazard::BSBSumm(out2, "omega1") %>%
   select(ind = Individual, omega1 = Mean) %>%
-  left_join(bsbhaz_get_summaries(out1, "omega2") %>%
+  left_join(BGPhazard::BSBSumm(out2, "omega2") %>%
               select(ind = Individual, omega2 = Mean), by = "ind") %>%
   ggplot(aes(x = ind, y = omega1)) +
   geom_segment(aes(xend = ind, yend = omega2), color = "dodgerblue1") +
@@ -175,9 +182,9 @@ frailties_chain2 <- bsbhaz_get_summaries(out2, "omega1") %>%
   theme(panel.grid.minor = element_blank(),
         legend.title = element_blank())
 
-frailties_chain3 <- bsbhaz_get_summaries(out3, "omega1") %>%
+frailties_chain3 <- BGPhazard::BSBSumm(out3, "omega1") %>%
   select(ind = Individual, omega1 = Mean) %>%
-  left_join(bsbhaz_get_summaries(out1, "omega2") %>%
+  left_join(BGPhazard::BSBSumm(out3, "omega2") %>%
               select(ind = Individual, omega2 = Mean), by = "ind") %>%
   ggplot(aes(x = ind, y = omega1)) +
   geom_segment(aes(xend = ind, yend = omega2), color = "dodgerblue1") +
@@ -190,9 +197,9 @@ frailties_chain3 <- bsbhaz_get_summaries(out3, "omega1") %>%
   theme_bw() +
   theme(panel.grid.minor = element_blank(), legend.position = "none")
 
-frailties_chain4 <- bsbhaz_get_summaries(out2, "omega1") %>%
+frailties_chain4 <- BGPhazard::BSBSumm(out4, "omega1") %>%
   select(ind = Individual, omega1 = Mean) %>%
-  left_join(bsbhaz_get_summaries(out1, "omega2") %>%
+  left_join(BGPhazard::BSBSumm(out4, "omega2") %>%
               select(ind = Individual, omega2 = Mean), by = "ind") %>%
   ggplot(aes(x = ind, y = omega1)) +
   geom_segment(aes(xend = ind, yend = omega2), color = "dodgerblue1") +
@@ -243,7 +250,7 @@ omega1_chain1 %>%
   bind_rows(omega1_chain2, omega1_chain3, omega1_chain4) %>%
   ggplot(aes(x = name, y = value, color = chain)) +
   geom_line(alpha = 0.3) +
-  scale_color_manual(values = colores) +
+  scale_color_manual(values = colores, labels = etiquetas) +
   scale_x_continuous(labels = scales::comma) +
   facet_wrap(~individuo, scales = "free_y") +
   labs(y = TeX("$\\omega_1$"), x = "Iteración") +
@@ -259,11 +266,11 @@ omega1_chain1 %>%
 omega1_chain1 %>%
   bind_rows(omega1_chain2, omega1_chain3, omega1_chain4) %>%
   group_by(individuo, chain) %>%
-  mutate(value = cumsum(value) / 1:45000) %>%
+  mutate(value = cumsum(value) / 1:40000) %>%
   ungroup() %>%
   ggplot(aes(x = name, y = value, color = chain)) +
   geom_line(alpha = 0.3, size = 0.7) +
-  scale_color_manual(values = colores) +
+  scale_color_manual(values = colores, labels = etiquetas) +
   scale_x_continuous(labels = scales::comma) +
   facet_wrap(~individuo, scales = "free_y") +
   labs(y = TeX("$\\hat{\\mu}_{\\omega_1}$"), x = "Iteración") +
@@ -310,7 +317,7 @@ omega2_chain1 %>%
   bind_rows(omega2_chain2, omega2_chain3, omega2_chain4) %>%
   ggplot(aes(x = name, y = value, color = chain)) +
   geom_line(alpha = 0.3) +
-  scale_color_manual(values = colores) +
+  scale_color_manual(values = colores, labels = etiquetas) +
   scale_x_continuous(labels = scales::comma) +
   facet_wrap(~individuo, scales = "free_y") +
   labs(y = TeX("$\\omega_2$"), x = "Iteración") +
@@ -326,11 +333,11 @@ omega2_chain1 %>%
 omega2_chain1 %>%
   bind_rows(omega2_chain2, omega2_chain3, omega2_chain4) %>%
   group_by(individuo, chain) %>%
-  mutate(value = cumsum(value) / 1:45000) %>%
+  mutate(value = cumsum(value) / 1:40000) %>%
   ungroup() %>%
   ggplot(aes(x = name, y = value, color = chain)) +
   geom_line(alpha = 0.3, size = 0.7) +
-  scale_color_manual(values = colores) +
+  scale_color_manual(values = colores, labels = etiquetas) +
   scale_x_continuous(labels = scales::comma) +
   facet_wrap(~individuo, scales = "free_y") +
   labs(y = TeX("$\\hat{\\mu}_{\\omega_1}$"), x = "Iteración") +
@@ -346,64 +353,86 @@ omega2_chain1 %>%
 
 # Hazards -----------------------------------------------------------------
 
-bsbhaz_get_summaries(out1, "lambda1") %>%
-  select(int = Interval, mean = Mean, low = `Prob. Low 95%`, high = `Prob. High 95%`) %>%
-  mutate(int_start = seq(from = 0,  to = 560, by = 10),
-         int_end = seq(from = 10, to = 570, by = 10)) %>%
-  ggplot(aes(x = int_start)) +
-  geom_segment(aes(y = mean, xend = int_end, yend = mean),
-               color = "steelblue1",
-               size = 0.7) +
-  geom_segment(aes(y = low, xend = int_end, yend = low),
-               lty = 3,
-               color = "steelblue1",
-               size = 0.7) +
-  geom_segment(aes(y = high, xend = int_end, yend = high),
-               lty = 3,
-               color = "steelblue1",
-               size = 0.7) +
-  scale_x_continuous(breaks = seq(from = 0, to = 570, by = 30)) +
-  scale_y_continuous(breaks = seq(from = 0, to = .25, by = .05)) +
-  labs(x = "t", y = TeX("$\\hat{\\mu}_{\\lambda_1}$")) +
-  theme_bw() +
-  theme(panel.grid = element_blank()) +
-  ggsave("graphs/hazard1.png",
-         width = 14,
-         height = 10,
-         units = "cm")
+h11 <- BGPhazard::BSBPlotSumm(out1, "lambda1")
+h12 <- BGPhazard::BSBPlotSumm(out2, "lambda1")
+h13 <- BGPhazard::BSBPlotSumm(out3, "lambda1")
+h14 <- BGPhazard::BSBPlotSumm(out4, "lambda1")
 
-bsbhaz_get_summaries(out1, "lambda2") %>%
-  select(int = Interval, mean = Mean, low = `Prob. Low 95%`, high = `Prob. High 95%`) %>%
-  mutate(int_start = seq(from = 0,  to = 560, by = 10),
-         int_end = seq(from = 10, to = 570, by = 10)) %>%
-  ggplot(aes(x = int_start)) +
-  geom_segment(aes(y = mean, xend = int_end, yend = mean),
-               color = "steelblue1",
-               size = 0.7) +
-  geom_segment(aes(y = low, xend = int_end, yend = low),
-               lty = 3,
-               color = "steelblue1",
-               size = 0.7) +
-  geom_segment(aes(y = high, xend = int_end, yend = high),
-               lty = 3,
-               color = "steelblue1",
-               size = 0.7) +
-  scale_x_continuous(breaks = seq(from = 0, to = 570, by = 30)) +
-  scale_y_continuous(breaks = seq(from = 0, to = .25, by = .05)) +
-  labs(x = "t", y = TeX("$\\hat{\\mu}_{\\lambda_2}$")) +
-  theme_bw() +
-  theme(panel.grid = element_blank()) +
-  ggsave("graphs/hazard2.png",
-         width = 14,
-         height = 10,
-         units = "cm")
+(h11 | h12) / (h13 | h14)
+ggsave("graphs/hazard1.png",
+                width = 35,
+                height = 15,
+                units = "cm")
 
-png(filename = "graphs/theta_acf.png",
+h21 <- BGPhazard::BSBPlotSumm(out1, "lambda2")
+h22 <- BGPhazard::BSBPlotSumm(out2, "lambda2")
+h23 <- BGPhazard::BSBPlotSumm(out3, "lambda2")
+h24 <- BGPhazard::BSBPlotSumm(out4, "lambda2")
+
+(h21 | h22) / (h23 | h24)
+ggsave("graphs/hazard2.png",
+       width = 35,
+       height = 15,
+       units = "cm")
+
+# BGPhazard::BSBSumm(out1, "lambda1") %>%
+#   select(int = Interval, mean = Mean, low = `Prob. Low 95%`, high = `Prob. High 95%`) %>%
+#   mutate(int_start = seq(from = 0,  to = 560, by = 10),
+#          int_end = seq(from = 10, to = 570, by = 10)) %>%
+#   ggplot(aes(x = int_start)) +
+#   geom_segment(aes(y = mean, xend = int_end, yend = mean),
+#                color = "steelblue1",
+#                size = 0.7) +
+#   geom_segment(aes(y = low, xend = int_end, yend = low),
+#                lty = 3,
+#                color = "steelblue1",
+#                size = 0.7) +
+#   geom_segment(aes(y = high, xend = int_end, yend = high),
+#                lty = 3,
+#                color = "steelblue1",
+#                size = 0.7) +
+#   scale_x_continuous(breaks = seq(from = 0, to = 570, by = 30)) +
+#   scale_y_continuous(breaks = seq(from = 0, to = .25, by = .05)) +
+#   labs(x = "t", y = TeX("$\\hat{\\mu}_{\\lambda_1}$")) +
+#   theme_bw() +
+#   theme(panel.grid = element_blank()) +
+#   ggsave("graphs/hazard1.png",
+#          width = 14,
+#          height = 10,
+#          units = "cm")
+# 
+# BGPhazard::BSBSumm(out1, "lambda2") %>%
+#   select(int = Interval, mean = Mean, low = `Prob. Low 95%`, high = `Prob. High 95%`) %>%
+#   mutate(int_start = seq(from = 0,  to = 560, by = 10),
+#          int_end = seq(from = 10, to = 570, by = 10)) %>%
+#   ggplot(aes(x = int_start)) +
+#   geom_segment(aes(y = mean, xend = int_end, yend = mean),
+#                color = "steelblue1",
+#                size = 0.7) +
+#   geom_segment(aes(y = low, xend = int_end, yend = low),
+#                lty = 3,
+#                color = "steelblue1",
+#                size = 0.7) +
+#   geom_segment(aes(y = high, xend = int_end, yend = high),
+#                lty = 3,
+#                color = "steelblue1",
+#                size = 0.7) +
+#   scale_x_continuous(breaks = seq(from = 0, to = 570, by = 30)) +
+#   scale_y_continuous(breaks = seq(from = 0, to = .25, by = .05)) +
+#   labs(x = "t", y = TeX("$\\hat{\\mu}_{\\lambda_2}$")) +
+#   theme_bw() +
+#   theme(panel.grid = element_blank()) +
+#   ggsave("graphs/hazard2.png",
+#          width = 14,
+#          height = 10,
+#          units = "cm")
+
+png(filename = "graphs/gamma_acf.png",
     width = 14,
     height = 10,
     units = "cm",
     res = 300)
 
-acf(out1$theta[1, ], lag.max = 1000, main = "")
+acf(out3$gamma[1, ], lag.max = 1000, main = "")
 
 dev.off()
