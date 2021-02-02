@@ -26,7 +26,8 @@
 \bibliographystyle{apa-good}
 
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathcal{C}}
+\show\C
+%\newcommand{\C}{\mathcal{C}}
 \newtheorem{theorem}{Teorema}[section]
 \newtheorem{proposition}{Proposición}[subsection]
 
@@ -102,6 +103,9 @@
 \setlength{\parindent}{0pt}
 
 \section{Introducción}
+\label{intro}
+
+Se conoce como análisis de supervivencia al análisis de variables aleatorias no negativas. Frecuentemente se trata del estudio del tiempo entre dos eventos, el evento de inicio y el evento de fin y los factores que los afectan. Algunos ejemplos son el tiempo que tarda un paciente entre que se contagia con cierta enfermedad y muere, el tiempo de recaída tras haber sido diagnosticado como curado, el tiempo de recuperación tras tomar un medicamento o el tiempo que tarda una máquina en dejar de funcionar \citep{moore}. En el análisis de supervivencia univariado es usual suponer que los tiempos de supervivencia entre individuos son independientes, sin embargo, existen situaciones en que este supuesto no se cumple. Algunos ejemplos son muestras que contienen individuos con estructuras genéticas similares (hermanos, padres e hijos) o distintas observaciones en un mismo individuo (ojos y riñones). Las técnicas de análisis de supervivencia multivariado se utilizan cuando puede existir algún tipo de asociación entre los tiempos de supervivencia \citep{klein}.\\
 
 El objetivo de este trabajo es introducir al lector al modelo de supervivencia bivariado de \citet{nieto} y añadir su implementación al paquete de R \texttt{BGPhazard} de \citet{bgphazard}. Se decidió hacer la implementación en R porque es un lenguaje de programación popular con ciertas ventajas como las mencionadas por \citet{advanced_r}:
 \begin{enumerate}
@@ -124,7 +128,7 @@ El repositorio del paquete \texttt{BGPhazard} \citep{bgphazard} se encuentra en 
 
 \section{Análisis de supervivencia} \label{analisis_sup}
 
-El análisis de supervivencia se ocupa del análisis de variables aleatorias no negativas. Frecuentemente se trata del estudio del tiempo entre dos eventos, el evento de inicio y el evento de fin. Algunos ejemplos son el tiempo que tarda un paciente entre que se contagia con cierta enfermedad y muere, el tiempo de recaída tras haber sido diagnosticado como curado, el tiempo de recuperación tras tomar un medicamento o el tiempo que tarda una máquina en dejar de funcionar. La principal diferencia entre las técnicas de análisis de supervivencia y otras técnicas estadísticas es la presencia de información parcial o incompleta, como las observaciones censuradas o truncadas que se definen más adelante. Los tiempos pueden ser medidos en escala continua o discreta. En este trabajo nos concentraremos en tiempos medidos en una escala continua.\\
+Como se mencionó en la sección \ref{intro}, el análisis de supervivencia se ocupa del análisis de variables aleatorias no negativas, usualmente el tiempo entre un evento de inicio y un evento de fin.  La principal diferencia entre las técnicas de análisis de supervivencia y otras técnicas estadísticas es la presencia de información parcial o incompleta, como las observaciones censuradas o truncadas que se definen más adelante. Los tiempos pueden ser medidos en escala continua o discreta. En este trabajo nos concentraremos en tiempos medidos en una escala continua.\\
 
 En análisis de supervivencia es común trabajar con funciones distintas a la densidad y la distribución, que son las más frecuentes en otros análisis. Las funciones de interés suelen ser la \textbf{función de supervivencia}, la \textbf{función de riesgo} y la \textbf{función de riesgo acumulado}. A continuación definimos estas funciones para el caso continuo.\\
 
@@ -324,39 +328,39 @@ En este capítulo se complementa la teoría del análisis de supervivencia con u
 
 Las cópulas son funciones que se utilizan para construir distribuciones conjuntas a través de sus distribuciones univariadas. También se pueden entender las cópulas como funciones de distribución multivariadas con marginales $U(0, 1)$ \citep{nelsen}. Formalmente, se tiene la siguiente definición.\\
 
-\textbf{Definición.} Una cópula $\C$ es una función 
+\textbf{Definición.} Una cópula $\mathcal{C}$ es una función 
 \begin{align*}
-\C: [0,1]\times[0,1]&\to [0,1]\\
-(u,v) &\to \C(u,v)
+\mathcal{C}: [0,1]\times[0,1]&\to [0,1]\\
+(u,v) &\to \mathcal{C}(u,v)
 \end{align*} tal que:
 \begin{enumerate}
 \item $\forall \ u,v \in [0,1]$
 \begin{itemize}
-\item $\C (u,0) = \C (0,v) = 0$
-\item $\C(u,1) = u$
-\item $\C(1, v) = v$
+\item $\mathcal{C} (u,0) = \mathcal{C}(0,v) = 0$
+\item $\mathcal{C}(u,1) = u$
+\item $\mathcal{C}(1, v) = v$
 \end{itemize}
-\item $\forall \ u_1, u_2, v_1, v_2 \in [0,1]$ tales que $u_1 \leq u_2$ y $v_1 \leq v_2$  $$\C (u_1,v_1)+\C (u_2,v_2) - \C(u_1,v_2) - \C(u_2,v_1)\geq 0.$$\\
+\item $\forall \ u_1, u_2, v_1, v_2 \in [0,1]$ tales que $u_1 \leq u_2$ y $v_1 \leq v_2$  $$\mathcal{C} (u_1,v_1)+\mathcal{C} (u_2,v_2) - \mathcal{C}(u_1,v_2) - \mathcal{C}(u_2,v_1)\geq 0.$$\\
 \end{enumerate}
 
 Las cópulas se utilizan para modelar la estructura de dependencia entre las componentes de vectores aleatorios. Para poder entender esto, es necesario mencionar cómo se utilizan las cópulas para construir distribuciones conjuntas. El siguiente teorema es el resultado más importante de la teoría de cópulas \citep{copula_modeling}. Su importancia recae en que demuestra la relación que existe entre las cópulas y las funciones de distribución. El enunciado es como sigue.\\
 
 \begin{theorem}[Teorema de Sklar]
 \label{sklar}
-Sea $F$ una función de distribución conjunta con marginales $F_X$ y $F_Y$. Entonces, existe una cópula $\C$ tal que $\forall \ x,y \in \R$ $$F(x,y) = \C(F_X(x), F_Y(y)).$$ Si $F_X$ y $F_Y$ son continuas, entonces $\C$ es única.\\
+Sea $F$ una función de distribución conjunta con marginales $F_X$ y $F_Y$. Entonces, existe una cópula $\mathcal{C}$ tal que $\forall \ x,y \in \R$ $$F(x,y) = \mathcal{C}(F_X(x), F_Y(y)).$$ Si $F_X$ y $F_Y$ son continuas, entonces $\mathcal{C}$ es única.\\
 
-De la misma manera, si $\C$ es una cópula y $F_X$, $F_Y$ son funciones de distribución univariadas, entonces la función $F$ definida como $$F(x, y) = \C(F_X(x), F_Y(y))$$ es una función de distribución conjunta con marginales $F_X$ y $F_Y$.\\
+De la misma manera, si $\mathcal{C}$ es una cópula y $F_X$, $F_Y$ son funciones de distribución univariadas, entonces la función $F$ definida como $$F(x, y) = \mathcal{C}(F_X(x), F_Y(y))$$ es una función de distribución conjunta con marginales $F_X$ y $F_Y$.\\
 \end{theorem}
 
-La demostración de este teorema se puede encontrar en \citet{nelsen}. A la cópula $\C$ del teorema \ref{sklar} se le llama \textit{cópula de $X$ y $Y$} y se denota $\C_{XY}$.\\
+La demostración de este teorema se puede encontrar en \citet{nelsen}. A la cópula $\mathcal{C}$ del teorema \ref{sklar} se le llama \textit{cópula de $X$ y $Y$} y se denota $\mathcal{C}_{XY}$.\\
 
-Dos importantes conclusiones se derivan directamente del teorema de Sklar. Primero, si se tienen observaciones de un vector bivariado $(X, Y)$ con distribuciones marginales continuas, \eqref{sklar} dice que la cópula correspondiente a su distribución conjunta es única. Por lo tanto, es útil estimarla a partir de datos disponibles para poder modelar la estructura de dependencia entre $X$ y $Y$. Por otro lado, el teorema de Sklar es una herramienta para crear distribuciones conjuntas con la estructura de dependencia que más convenga a cierta aplicación. En específico, si se tienen distribuciones marginales $F_X$ y $F_Y$, junto con una estructura de dependencia modelada a través de una cópula $\C$, entonces se puede crear una función de distribución conjunta que refleje esta estructura utilizando $F(x, y) = \C (F_X(x), F_Y(y))$.\\
+Dos importantes conclusiones se derivan directamente del teorema de Sklar. Primero, si se tienen observaciones de un vector bivariado $(X, Y)$ con distribuciones marginales continuas, \eqref{sklar} dice que la cópula correspondiente a su distribución conjunta es única. Por lo tanto, es útil estimarla a partir de datos disponibles para poder modelar la estructura de dependencia entre $X$ y $Y$. Por otro lado, el teorema de Sklar es una herramienta para crear distribuciones conjuntas con la estructura de dependencia que más convenga a cierta aplicación. En específico, si se tienen distribuciones marginales $F_X$ y $F_Y$, junto con una estructura de dependencia modelada a través de una cópula $\mathcal{C}$, entonces se puede crear una función de distribución conjunta que refleje esta estructura utilizando $F(x, y) = \mathcal{C} (F_X(x), F_Y(y))$.\\
 
 Un caso singular de las estructuras de dependencia mencionadas es cuando las componentes de un vector aleatorio son independientes. La forma más común de estudiar relaciones entre las componentes es con el coeficiente de correlación de Pearson, el cual solamente cuantifica la dependencia lineal entre variables. Esto significa que si las componentes son independientes, entonces el coeficiente de correlación vale cero. Sin embargo, un coeficiente de correlación cero no implica independencia entre las componentes (ver figura \ref{fig:panel_corr}). En contraste con el coeficiente de correlación, la teoría de cópulas tiene una forma única de modelar independencia entre las componentes de un vector aleatorio. El teorema \ref{independencia} muestra cómo se modela esta independencia con una cópula específica.\\
 
 \begin{theorem}
 \label{independencia}
-Sean $X$ y $Y$ dos variables aleatorias continuas con función de distribución conjunta $F$ y marginales $F_X$ y $F_Y$ respectivamente. Entonces $X$ y $Y$ son independientes si y solo si $\C_{XY} = \Pi$, donde $\Pi$ es la cópula producto dada por $\Pi (u,v) = uv.$
+Sean $X$ y $Y$ dos variables aleatorias continuas con función de distribución conjunta $F$ y marginales $F_X$ y $F_Y$ respectivamente. Entonces $X$ y $Y$ son independientes si y solo si $\mathcal{C}_{XY} = \Pi$, donde $\Pi$ es la cópula producto dada por $\Pi (u,v) = uv.$
 \end{theorem}
 
 \begin{proof}\mbox{}\\*
@@ -365,14 +369,14 @@ $\implies\big)$ Si $X$ y $Y$ son independientes, entonces
 F(x, y) = F_X(x)F_Y(y).
 \end{equation}
 
-Por el teorema \ref{sklar}, como $F_X$ y $F_Y$ son continuas, se sabe que existe una única cópula $\C_{XY}$ tal que
+Por el teorema \ref{sklar}, como $F_X$ y $F_Y$ son continuas, se sabe que existe una única cópula $\mathcal{C}_{XY}$ tal que
 \begin{equation} \label{copula}
-F(x, y) = \C_{XY}(F_X(x), F_Y(y)).
+F(x, y) = \mathcal{C}_{XY}(F_X(x), F_Y(y)).
 \end{equation}
 
-Juntando \eqref{conjunta} y \eqref{copula} se tiene que $\C_{XY}(F_X(x), F_Y(y)) = F_X(x)F_Y(y)$, por lo que $\C_{XY} = \Pi$.
+Juntando \eqref{conjunta} y \eqref{copula} se tiene que $\mathcal{C}_{XY}(F_X(x), F_Y(y)) = F_X(x)F_Y(y)$, por lo que $\mathcal{C}_{XY} = \Pi$.
 
-$\impliedby \big)$ Por el teorema \ref{sklar} existe una única $\C_{XY}$ tal que $F(x, y) = \C_{XY}(F_X(x), F_Y(y))$. Si $\C_{XY} = \Pi$ se tiene que $F(x, y) = F_X(x)F_Y(y)$, es decir, $X$ y $Y$ son independientes.\\
+$\impliedby \big)$ Por el teorema \ref{sklar} existe una única $\mathcal{C}_{XY}$ tal que $F(x, y) = \mathcal{C}_{XY}(F_X(x), F_Y(y))$. Si $\mathcal{C}_{XY} = \Pi$ se tiene que $F(x, y) = F_X(x)F_Y(y)$, es decir, $X$ y $Y$ son independientes.\\
 \end{proof}
 
 Como en análisis de supervivencia es común trabajar con la función de supervivencia conjunta en vez de la distribución, se introduce el concepto de las cópulas de supervivencia. Se quiere ahora una función $\widehat{C}$ tal que
@@ -430,8 +434,8 @@ Viendo la figura \ref{fig:panel_corr}, es claro que las componentes del vector $
 Un valor más grande de $\uptau_{XY}$ significa que es más probable que un par de observaciones del vector aleatorio $(X, Y)$ sea concordante, es decir, que valores `grandes' de $X$ vienen acompañados de valores `grandes' de $Y$ o valores `chicos' de $X$ vienen acompañados de valores `chicos' de $Y$. Ahora se enuncian algunas propiedades de la tau de Kendall.\\
 
 \begin{proposition}
-Sean $X$ y $Y$ dos variables aleatorias continuas con cópula $\C$. Entonces
-$$\uptau_{XY} = 4\int_{0}^1\int_{0}^1\C(u, v) \ d\C(u, v) - 1.$$ 
+Sean $X$ y $Y$ dos variables aleatorias continuas con cópula $\mathcal{C}$. Entonces
+$$\uptau_{XY} = 4\int_{0}^1\int_{0}^1\mathcal{C}(u, v) \ d\mathcal{C}(u, v) - 1.$$ 
 \end{proposition}
 
 \begin{proof} Esta prueba es una adaptación de la demostración en \citet{nelsen}.
@@ -442,23 +446,23 @@ Como $P\{(X_1-X_2)(Y_1-Y_2) < 0\} = 1-P\{(X_1-X_2)(Y_1-Y_2) > 0\}$, entonces
 \uptau_{XY} = 2P\{(X_1-X_2)(Y_1-Y_2) > 0\} - 1.
 \end{equation}
 
-Como la distribución conjunta de $X$ y $Y$ es $\C(F_X(x), F_Y(y))$, se puede evaluar esta probabilidad en términos de $\C$:
+Como la distribución conjunta de $X$ y $Y$ es $\mathcal{C}(F_X(x), F_Y(y))$, se puede evaluar esta probabilidad en términos de $\mathcal{C}$:
 \begin{equation} \label{dobleprob}
 P\{(X_1-X_2)(Y_1-Y_2) > 0\} = P\{X_1<X_2, Y_1<Y_2\} + P\{X_2<X_1, Y_2<Y_1\}.
 \end{equation}
 
 \begin{align*}
 P\{X_1 < X_2, Y_1 < Y_2\} &=\\
-\int_{S_X} \int_{S_Y} &P\{X_1 < X_2, Y_1 < Y_2 | X_2 = x, Y_2 = y\} \ d\C(F_X(x), F_Y(y))\\
-&= \int_{S_X} \int_{S_Y} P\{X_1 < x, Y_1 < y\} \ d\C(F_X(x), F_Y(y))\\
-&= \int_{S_X} \int_{S_Y} \C(F_X(x), F_Y(y)) \ d\C(F_X(x), F_Y(y))\\
-&= \int_0^1 \int_0^1 \C(u, v) \ d\C(u, v)
+\int_{S_X} \int_{S_Y} &P\{X_1 < X_2, Y_1 < Y_2 | X_2 = x, Y_2 = y\} \ d\mathcal{C}(F_X(x), F_Y(y))\\
+&= \int_{S_X} \int_{S_Y} P\{X_1 < x, Y_1 < y\} \ d\mathcal{C}(F_X(x), F_Y(y))\\
+&= \int_{S_X} \int_{S_Y} \mathcal{C}(F_X(x), F_Y(y)) \ d\mathcal{C}(F_X(x), F_Y(y))\\
+&= \int_0^1 \int_0^1 \mathcal{C}(u, v) \ d\mathcal{C}(u, v)
 \end{align*}
 donde la última igualdad se obtiene con las transformaciones $u = F_X(x)$ y $v = F_Y(y)$.\\
 
-De la misma manera, condicionando sobre $X_1, Y_1$ se obtiene que $$P\{X_2 < X_1, Y_2 < Y_1\} = \int_0^1 \int_0^1 \C(u, v) \ d\C(u, v).$$
+De la misma manera, condicionando sobre $X_1, Y_1$ se obtiene que $$P\{X_2 < X_1, Y_2 < Y_1\} = \int_0^1 \int_0^1 \mathcal{C}(u, v) \ d\mathcal{C}(u, v).$$
 
-Sustituyendo estas expresiones en \eqref{dobleprob} y \eqref{tau} se concluye la prueba. Una explicación sobre el diferencial $d\C(u, v)$ se incluye en el apéndice \ref{densidad_copula}.\\
+Sustituyendo estas expresiones en \eqref{dobleprob} y \eqref{tau} se concluye la prueba. Una explicación sobre el diferencial $d\mathcal{C}(u, v)$ se incluye en el apéndice \ref{densidad_copula}.\\
 \end{proof}
 
 Con el resultado anterior, se pueden demostrar las siguientes propiedades de $\uptau_{XY}$ \citep{nelsen}:
@@ -476,15 +480,15 @@ Con el resultado anterior, se pueden demostrar las siguientes propiedades de $\u
 \rho_{XY} = \frac{cov(U, V)}{\sqrt{var(U)}\sqrt{var(V)}}.
 \end{equation}\\
 
-La definición \eqref{rho} es el coeficiente de correlación de Pearson entre $F_X(X)$ y $F_Y(Y)$. Si además $X$ y $Y$ tienen cópula $\C$, entonces las siguientes definiciones son equivalentes a \eqref{rho} \citep{nelsen}:
+La definición \eqref{rho} es el coeficiente de correlación de Pearson entre $F_X(X)$ y $F_Y(Y)$. Si además $X$ y $Y$ tienen cópula $\mathcal{C}$, entonces las siguientes definiciones son equivalentes a \eqref{rho} \citep{nelsen}:
 
 \begin{align}
 \rho_{XY} &= 12\int_0^1 \int_0^1 C(u, v) \ dudv-3\\
-\rho_{XY} &= 12\int_0^1 \int_0^1 uv \ d\C(u,v)-3\\
-\rho_{XY} &= 12\int_0^1\int_0^1 \left[ \C(u, v) - uv \right] dudv \label{volumen}.
+\rho_{XY} &= 12\int_0^1 \int_0^1 uv \ d\mathcal{C}(u,v)-3\\
+\rho_{XY} &= 12\int_0^1\int_0^1 \left[ \mathcal{C}(u, v) - uv \right] dudv \label{volumen}.
 \end{align}
 
-En \citet{nelsen} se menciona una interesante interpretación de \eqref{volumen}. Se puede ver a $\rho_{XY}$ como una `distancia promedio' entre la distribución de $X$ y $Y$, representada por la cópula $\C$, y la independencia representada por la cópula $\Pi$.\\
+En \citet{nelsen} se menciona una interesante interpretación de \eqref{volumen}. Se puede ver a $\rho_{XY}$ como una `distancia promedio' entre la distribución de $X$ y $Y$, representada por la cópula $\mathcal{C}$, y la independencia representada por la cópula $\Pi$.\\
 
 Al igual que $\uptau_{XY}$, $\rho_{XY}$ cumple las siguientes propiedades:
 
@@ -1367,7 +1371,7 @@ donde $E_m$ es el valor esperado con respecto a la distribución $m(\omega_1, \o
 
 Se recuerdan al lector las expresiones de la tau de Kendall y la rho de Spearman para una cópula $\mathcal{C}$:
 \begin{itemize}
-\item $\uptau_{\mathcal{C}} = 4\int_{0}^1\int_{0}^1\C(u, v) \ d\C(u, v) - 1,$\\
+\item $\uptau_{\mathcal{C}} = 4\int_{0}^1\int_{0}^1\mathcal{C}(u, v) \ d\mathcal{C}(u, v) - 1,$\\
 \item $\rho_{\mathcal{C}} = 12\int_0^1 \int_0^1 C(u, v) \ dudv-3.$
 \end{itemize}
 Se pueden reescribir estas integrales como valores esperados y utilizar integración Monte Carlo para aproximarlas:
@@ -1399,7 +1403,7 @@ Ahora, como en \eqref{marginal} se requiere que las $\omega_j$ tengan una distri
 y &\sim Pg(2, 1, \gamma)\\
 \text{y } corr(\omega_1, \omega_2) &= \frac{\gamma}{1 + \gamma}. \nonumber
 \end{align}
-Así, el único parámetro necesario para definir la distribución es $\gamma$ y se tiene que $(\omega_1, \omega_2) \sim BGa(2, 1, \gamma), \ \gamma >0$. Con esta construcción de $m(\omega_1, \omega_2)$, se pueden ya realizar las aproximaciones de $\uptau_\C$ y $\rho_\C$. Se incluyen gráficas y el código para aproximar ambas cantidades como función del parámetro $\gamma$. Primero se definen dos funciones para aproximar el valor de $\C(u, v)$ y $\partial c(u, v)$.
+Así, el único parámetro necesario para definir la distribución es $\gamma$ y se tiene que $(\omega_1, \omega_2) \sim BGa(2, 1, \gamma), \ \gamma >0$. Con esta construcción de $m(\omega_1, \omega_2)$, se pueden ya realizar las aproximaciones de $\uptau_\mathcal{C}$ y $\rho_\mathcal{C}$. Se incluyen gráficas y el código para aproximar ambas cantidades como función del parámetro $\gamma$. Primero se definen dos funciones para aproximar el valor de $\mathcal{C}(u, v)$ y $\partial c(u, v)$.
 
 \begin{lstlisting}
 copula <- function(u, v, omega1, omega2) {
@@ -1430,7 +1434,7 @@ sim_omega <- function(n.sim, a = 2, b = 1, gamma = 5) {
 }
 \end{lstlisting}
 
-Ahora, se realiza la aproximación de $\uptau_\C$.\\
+Ahora, se realiza la aproximación de $\uptau_\mathcal{C}$.\\
 
 \begin{lstlisting}
 n.sim <- 1e4
@@ -1463,11 +1467,11 @@ for (i in 1:length(x)) {
 
 \begin{figure}[h]
 \centering\includegraphics[width=10cm]{kendall_tau.png}
-\caption{Gráfica de $\uptau_\C (\gamma)$.}
+\caption{Gráfica de $\uptau_\mathcal{C} (\gamma)$.}
 \label{fig:kendall_tau}
 \end{figure}
 
-En la figura \ref{fig:kendall_tau} se puede ver que $\uptau_\C$ es una función creciente de $\gamma$. Además, parece tener un comportamiento asintótico alrededor de $\uptau_\C = 0.3$. Para la aproximación de $\rho_\C$, se utiliza la misma muestra de $(U, V)$. El código para la aproximación es el siguiente.\\
+En la figura \ref{fig:kendall_tau} se puede ver que $\uptau_\mathcal{C}$ es una función creciente de $\gamma$. Además, parece tener un comportamiento asintótico alrededor de $\uptau_\mathcal{C} = 0.3$. Para la aproximación de $\rho_\mathcal{C}$, se utiliza la misma muestra de $(U, V)$. El código para la aproximación es el siguiente.\\
 
 \begin{lstlisting}
 spearman_rho <- function(gamma) {
@@ -1491,11 +1495,11 @@ for (i in 1:length(x)) {
 
 \begin{figure}[h]
 \centering\includegraphics[width=10cm]{spearman_rho.png}
-\caption{Gráfica de $\rho_\C (\gamma)$.}
+\caption{Gráfica de $\rho_\mathcal{C} (\gamma)$.}
 \label{fig:spearman_rho}
 \end{figure}
 
-Al igual que en el caso de $\uptau_\C$, en la figura \ref{fig:spearman_rho} se ve que $\rho_\C$ es una función creciente de $\gamma$ con un comportamiento asintótico alrededor de $\rho_\C = 0.4$. Por último, se presenta una gráfica de la cópula \eqref{copula_distribucion} para $\gamma = 5$. Para generar la gráfica de $\C(u, v)$, se utiliza una muestra de $m(\omega_1, \omega_2)$ para $\gamma = 5$ y la expresión de $\C$ como valor esperado para evaluar la función. El código se incluye a continuación.\\
+Al igual que en el caso de $\uptau_\mathcal{C}$, en la figura \ref{fig:spearman_rho} se ve que $\rho_\mathcal{C}$ es una función creciente de $\gamma$ con un comportamiento asintótico alrededor de $\rho_\mathcal{C} = 0.4$. Por último, se presenta una gráfica de la cópula \eqref{copula_distribucion} para $\gamma = 5$. Para generar la gráfica de $\mathcal{C}(u, v)$, se utiliza una muestra de $m(\omega_1, \omega_2)$ para $\gamma = 5$ y la expresión de $\mathcal{C}$ como valor esperado para evaluar la función. El código se incluye a continuación.\\
 
 \begin{lstlisting}
 set.seed(42)
@@ -1512,11 +1516,11 @@ for (u in 1:length(secuencia)) {
 
 \begin{figure}[h]
 \centering\includegraphics[width=10cm]{copula_5.png}
-\caption{Gráfica de $\C (u, v)$ para $\gamma = 5$ en el cubo $(u, v, \C) \in [0, 1]^3$.}
+\caption{Gráfica de $\mathcal{C} (u, v)$ para $\gamma = 5$ en el cubo $(u, v, \mathcal{C}) \in [0, 1]^3$.}
 \label{fig:copula}
 \end{figure}
 
-En la figura \ref{fig:copula}, se pueden notar gráficamente algunas de las propiedades de $\C$, como que cae a cero cuando $u \to 0$ o $v \to 0$ y que $\C (u, v) \to 1$ cuando $(u, v) \to (1, 1)$.\\
+En la figura \ref{fig:copula}, se pueden notar gráficamente algunas de las propiedades de $\mathcal{C}$, como que cae a cero cuando $u \to 0$ o $v \to 0$ y que $\mathcal{C} (u, v) \to 1$ cuando $(u, v) \to (1, 1)$.\\
 
 Ya que se formuló el modelo, se describen las distribuciones iniciales de las tasas de riesgo $h_1$ y $h_2$, al igual que para el parámetro $\gamma$. En el siguiente apartado se calculan las distribuciones posteriores condicionales de todos los parámetros y se explica cómo simular observaciones de las distribuciones marginales utilizando el muestreador de Gibbs. También se explica cómo incorporar las variables latentes $\omega_1$, $\omega_2$y $y$ en las simulaciones para poder obtener estimaciones muestrales de sus distribuciones.
 
@@ -2184,26 +2188,26 @@ En este trabajo no se habló con mucho detalle de las decisiones que se tomaron 
 \begin{appendices}
 \section{Densidad de una cópula} \label{densidad_copula}
 
-Sean $X$ y $Y$ dos variables aleatorias continuas con función de distribución conjunta $F$ y marginales $F_X$ y $F_Y$. El teorema de Sklar (\ref{sklar}) dice que existe una única cópula $\C$ tal que $$F(x, y) = \C(F_X(x), F_Y(y)).$$\\
+Sean $X$ y $Y$ dos variables aleatorias continuas con función de distribución conjunta $F$ y marginales $F_X$ y $F_Y$. El teorema de Sklar (\ref{sklar}) dice que existe una única cópula $\mathcal{C}$ tal que $$F(x, y) = \mathcal{C}(F_X(x), F_Y(y)).$$\\
 
 \begin{proposition}
-Bajo las condiciones del Teorema de Sklar, la densidad conjunta de $X$ y $Y$, denotada $f$, está dada por $$\frac{\partial^2 F}{\partial y \partial x} = \partial c(F_X(x), F_Y(y))f_X(x)f_Y(y),$$ donde $\partial c$ es la densidad de la cópula $\C$, $f_X$ es la densidad marginal de $X$ y $f_Y$ la densidad marginal de $Y$.
+Bajo las condiciones del Teorema de Sklar, la densidad conjunta de $X$ y $Y$, denotada $f$, está dada por $$\frac{\partial^2 F}{\partial y \partial x} = \partial c(F_X(x), F_Y(y))f_X(x)f_Y(y),$$ donde $\partial c$ es la densidad de la cópula $\mathcal{C}$, $f_X$ es la densidad marginal de $X$ y $f_Y$ la densidad marginal de $Y$.
 \end{proposition} 
 
 \begin{proof}
 \begin{align*}
-\frac{\partial F}{\partial x} &= \frac{\partial \C(F_X(x), F_Y(y))}{\partial x}\\\\
-&= \frac{\partial \C}{\partial F_X} \frac{\partial F_X}{\partial x}\\\\
-&= \frac{\partial \C}{\partial F_X}f_X(x)\\\\
-\frac{\partial F}{\partial y \partial x} &= \frac{\partial}{\partial y} \left[\frac{\partial \C}{\partial F_X}f_X(x)\right]\\\\
-&= \frac{\partial \C}{F_Y F_X}\frac{\partial F_Y}{\partial y}f_X(x)\\\\
+\frac{\partial F}{\partial x} &= \frac{\partial \mathcal{C}(F_X(x), F_Y(y))}{\partial x}\\\\
+&= \frac{\partial \mathcal{C}}{\partial F_X} \frac{\partial F_X}{\partial x}\\\\
+&= \frac{\partial \mathcal{C}}{\partial F_X}f_X(x)\\\\
+\frac{\partial F}{\partial y \partial x} &= \frac{\partial}{\partial y} \left[\frac{\partial \mathcal{C}}{\partial F_X}f_X(x)\right]\\\\
+&= \frac{\partial \mathcal{C}}{F_Y F_X}\frac{\partial F_Y}{\partial y}f_X(x)\\\\
 &= \partial c (F_X(x), F_Y(y)) f_X(x) f_Y(y).\\
 \end{align*}
 \end{proof}
 
-La notación $d\C(u, v)$ se refiere a la integral de Riemann-Stieltjes, una generalización de la integral de Riemann que se utiliza en la teoría de probabilidad para homologar notación entre distribuciones continuas y discretas. Si la función $F$ es una función de distribución continua con función de densidad $f(x) = \frac{d}{dx}F(x)$, $f(x) > 0 \ \forall x \in S_X$, se tiene que $$\int f(x) dx = \int dF(x)$$ (ver \citet{rudin}[p. 131]).\\
+La notación $d\mathcal{C}(u, v)$ se refiere a la integral de Riemann-Stieltjes, una generalización de la integral de Riemann que se utiliza en la teoría de probabilidad para homologar notación entre distribuciones continuas y discretas. Si la función $F$ es una función de distribución continua con función de densidad $f(x) = \frac{d}{dx}F(x)$, $f(x) > 0 \ \forall x \in S_X$, se tiene que $$\int f(x) dx = \int dF(x)$$ (ver \citet{rudin}[p. 131]).\\
 
-Si una cópula $\C$ tiene densidad dada por $\frac{\partial ^2}{\partial v \partial u} C(u, v)$, entonces $\C$ es absolutamente continua (ver \citet{nelsen}[p. 23]), por lo que $$\int\int \ d\C(u,v) = \int\int \partial c(u, v) \ dudv.$$\\
+Si una cópula $\mathcal{C}$ tiene densidad dada por $\frac{\partial ^2}{\partial v \partial u} C(u, v)$, entonces $\mathcal{C}$ es absolutamente continua (ver \citet{nelsen}[p. 23]), por lo que $$\int\int \ d\mathcal{C}(u,v) = \int\int \partial c(u, v) \ dudv.$$\\
 
 Para mayor información sobre integrales de Riemann-Stieltjes ver \citet{rudin} y \citet{bartle}.
 
