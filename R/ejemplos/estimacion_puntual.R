@@ -30,29 +30,29 @@ plot(
   points,
   posterior,
   type = "l",
-  col = "forestgreen",
+  col = viridis::viridis(3)[[1]],
   ylab = TeX("$f_{\\mu}$"),
   xlab = ""
   )
-points(points, prior, type = "l", col = "darkorange")
-points(points, likelihood, type = "l", col = "steelblue")
+points(points, prior, type = "l", col = viridis::viridis(3)[[2]],)
+points(points, likelihood, type = "l", col = viridis::viridis(3)[[3]],)
 lines(
   x = c(mx, mx),
   y = c(0, dnorm(mx, mean = mx, sd = sx)),
   lty = 2,
-  col = "forestgreen"
+  col = viridis::viridis(3)[[1]]
   )
 lines(
   x = c(m, m),
   y = c(0, dnorm(m, mean = m, sd = s)),
   lty = 2,
-  col = "darkorange"
+  col = viridis::viridis(3)[[2]]
   )
 lines(
   x = c(mu, mu),
   y = c(0, dnorm(mu, mean = mu, sd = sigma)),
   lty = 2,
-  col = "steelblue"
+  col = viridis::viridis(3)[[3]]
   )
 
 dev.off()

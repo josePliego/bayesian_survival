@@ -33,8 +33,8 @@ hist(
   xlab = "x",
   ylab = "",
   main = "",
-  col = "lightsteelblue1",
-  border = "lightsteelblue1"
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[2]],
   )
 
 curve(
@@ -43,14 +43,14 @@ curve(
   to = 10,
   add = TRUE,
   lwd = 2,
-  col = "steelblue4"
+  col = viridis::viridis(2)[[1]]
   )
 
 curve(
   M*g(x),
   from = 0,
   to = 10,
-  col = "steelblue4",
+  col = viridis::viridis(2)[[1]],
   lwd = 2,
   add = TRUE,
   lty = 2

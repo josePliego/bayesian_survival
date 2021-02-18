@@ -51,7 +51,7 @@ plot(
   type = "l",
   xlab = "",
   ylab = TeX("$\\omega_{ij}$"),
-  col = "steelblue4"
+  col = viridis::viridis(1)
 )
 
 dev.off()
@@ -125,7 +125,7 @@ plot(
   type = "l",
   xlab = "",
   ylab = TeX("$\\omega_{ij}$"),
-  col = "steelblue4"
+  col = viridis::viridis(1)
 )
 
 dev.off()

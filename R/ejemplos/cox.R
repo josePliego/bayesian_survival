@@ -22,7 +22,7 @@ plot(
   km1,
   lwd = 1.5,
   conf.int = FALSE,
-  col = "steelblue",
+  col = viridis::viridis(1),
   xlab = TeX("t"),
   ylab = TeX("\\hat{S}(t)"))
 
@@ -38,7 +38,7 @@ plot(
   km2,
   conf.int = FALSE,
   lwd = 1.5,
-  col = c("forestgreen", "darkorange"),
+  col = viridis::viridis(2),
   xlab = TeX("t"),
   ylab = TeX("\\hat{S}(t)"))
 dev.off()
@@ -48,7 +48,7 @@ dev.off()
 
 # Prop Haz assumption
 
-t_piloto<- km2$time[1:10]
+t_piloto <- km2$time[1:10]
 t_control <- km2$time[11:length(km2$time)]
 
 surv_piloto <- km2$surv[1:10]
@@ -66,7 +66,7 @@ plot(
   type = "s",
   ylim = c(-3, 0.9),
   xlim = c(log(5), 5),
-  col = "forestgreen",
+  col = viridis::viridis(1),
   xlab = TeX("log(t)"),
   ylab = TeX("log(-log \\hat{S}(t))")
   )
@@ -74,7 +74,7 @@ lines(
   log(t_control),
   log(-log(surv_control)),
   type = "s",
-  col = "darkorange"
+  col = viridis::viridis(2)[[2]]
   )
 dev.off()
 

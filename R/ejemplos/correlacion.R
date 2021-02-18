@@ -27,7 +27,7 @@ plot(
   xlab = TeX("$x_1$"),
   ylab = TeX("$x_2$"),
   pch = 19,
-  col = scales::alpha("steelblue1", 0.3)
+  col = scales::alpha(viridis::viridis(1), 0.3)
 )
 
 dev.off()
@@ -48,7 +48,7 @@ plot(
   xlab = TeX("$y_1$"),
   ylab = TeX("$y_2$"),
   pch = 19,
-  col = scales::alpha("steelblue1", 0.3)
+  col = scales::alpha(viridis::viridis(1), 0.3)
 )
 
 dev.off()

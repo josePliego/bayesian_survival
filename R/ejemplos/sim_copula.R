@@ -31,8 +31,25 @@ persp(
   xlab = "u",
   ylab = "v",
   zlab = "C",
-  col = "lightsteelblue1",
-  border = "steelblue"
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[1]]
   )
+
+dev.off()
+
+png(
+  filename = "graphs/copula_5_contour.png",
+  width = 30,
+  height = 30,
+  units = "cm",
+  res = 300
+)
+
+filled.contour(
+  secuencia,
+  secuencia,
+  grid,
+  color.palette = viridis::viridis
+)
 
 dev.off()

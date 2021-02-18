@@ -36,8 +36,8 @@ png(
 hist(
   x_y,
   probability = TRUE,
-  col = "lightsteelblue1",
-  border = "lightsteelblue1",
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[2]],
   ylim = c(0, 0.6),
   breaks = seq(from = -4, to = max(x_y) + 0.05, by = 0.05),
   main = "",
@@ -49,7 +49,7 @@ curve(f(x, mu, sqrt(sigmasq), grados_libertad),
       from = -4,
       to = max(x_y),
       add = TRUE,
-      col = "steelblue4",
+      col = viridis::viridis(2)[[1]],
       lwd = 2
       )
 

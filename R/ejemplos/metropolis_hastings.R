@@ -72,14 +72,14 @@ hist(
   main = "",
   xlab = "",
   ylab = "",
-  col = "lightsteelblue1",
-  border = "lightsteelblue1"
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[2]]
 )
 
 curve(
   dt(x, df = 5),
   add = TRUE,
-  col = "steelblue4"
+  col = viridis::viridis(2)[[1]]
 )
 
 dev.off()
@@ -95,7 +95,7 @@ png(
 plot(
   x1,
   type = "l",
-  col = "steelblue1",
+  col = viridis::viridis(1),
   ylab = TeX("$x_1^{(t)}"),
   xlab = "t"
   )
@@ -117,14 +117,14 @@ hist(
   main = "",
   xlab = "",
   ylab = "",
-  col = "lightsteelblue1",
-  border = "lightsteelblue1"
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[2]]
 )
 
 curve(
   dt(x, df = 5),
   add = TRUE,
-  col = "steelblue4"
+  col = viridis::viridis(2)[[1]]
 )
 
 dev.off()
@@ -140,7 +140,7 @@ png(
 plot(
   x2,
   type = "l",
-  col = "steelblue1",
+  col = viridis::viridis(1),
   ylab = TeX("$x_2^{(t)}"),
   xlab = "t"
 )
@@ -162,14 +162,14 @@ hist(
   main = "",
   xlab = "",
   ylab = "",
-  col = "lightsteelblue1",
-  border = "lightsteelblue1"
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[2]]
 )
 
 curve(
   dt(x, df = 5),
   add = TRUE,
-  col = "steelblue4"
+  col = viridis::viridis(2)[[1]]
 )
 
 dev.off()
@@ -185,7 +185,7 @@ png(
 plot(
   x3,
   type = "l",
-  col = "steelblue1",
+  col = viridis::viridis(1),
   ylab = TeX("$x_3^{(t)}"),
   xlab = "t"
 )

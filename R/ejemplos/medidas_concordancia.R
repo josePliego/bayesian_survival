@@ -46,7 +46,7 @@ plot(
   y,
   type = "l",
   lwd = 2,
-  col = "steelblue4",
+  col = viridis::viridis(1),
   ylab = TeX("$\\tau_C$"),
   xlab = TeX("$\\gamma$")
   )
@@ -85,10 +85,10 @@ png(
 
 plot(
   x,
-  rho + 1,
+  rho,
   type = "l",
   lwd = 2,
-  col = "steelblue4",
+  col = viridis::viridis(1),
   ylab = TeX("$\\rho_C$"),
   xlab = TeX("$\\gamma$")
 )

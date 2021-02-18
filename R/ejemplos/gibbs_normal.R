@@ -30,8 +30,8 @@ hist(
   probability = TRUE,
   breaks = seq(from = -4.5, to = 4.5, by = 0.1),
   ylab = "f(x)",
-  col = "lightsteelblue1",
-  border = "lightsteelblue1",
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[2]],
   main = ""
   )
 curve(
@@ -40,7 +40,7 @@ curve(
   to = 4.5,
   add = TRUE,
   lwd = 2,
-  col = "steelblue4"
+  col = viridis::viridis(2)[[1]],
   )
 
 dev.off()
@@ -58,8 +58,8 @@ hist(
   probability = TRUE,
   breaks = seq(from = -4.7, to = 4.7, by = 0.1),
   ylab = "f(y)",
-  col = "lightsteelblue1",
-  border = "lightsteelblue1",
+  col = viridis::viridis(2)[[2]],
+  border = viridis::viridis(2)[[2]],
   main = ""
 )
 curve(
@@ -68,7 +68,7 @@ curve(
   to = 4.7,
   lwd = 2,
   add = TRUE,
-  col = "steelblue4"
+  col = viridis::viridis(2)[[1]],
 )
 
 dev.off()
@@ -85,7 +85,7 @@ plot(
   x,
   y,
   pch = 19,
-  col = scales::alpha("steelblue1", alpha = 0.2),
+  col = scales::alpha(viridis::viridis(1), alpha = 0.2),
   ylim = c(-4.7, 4.7),
   xlim = c(-4.7, 4.7)
   )

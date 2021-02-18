@@ -36,15 +36,15 @@ hist(
     probability = TRUE,
     xlab = "",
     main = "",
-    col = "lightsteelblue1",
-    border = "lightsteelblue1",
+    col = viridis::viridis(2)[[2]],
+    border = viridis::viridis(2)[[2]],
     ylab = ""
     )
 
 points(
     1:x,
     dpois(1:x, lambda = 10),
-    col = "steelblue4",
+    col = viridis::viridis(2)[[1]],
     pch = 19
     )
 

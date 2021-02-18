@@ -36,8 +36,8 @@ png(
 hist(
   omega,
   breaks = seq(from = -1, to = 26, by = 1),
-  border = "steelblue4",
-  col = "lightsteelblue1",
+  border = viridis::viridis(1),
+  col = viridis::viridis(1),
   probability = TRUE,
   main = "",
   xlab = "",
@@ -57,8 +57,8 @@ png(
 hist(
   theta,
   breaks = seq(from = 0, to = 1, by = 0.01),
-  border = "steelblue4",
-  col = "lightsteelblue1",
+  border = viridis::viridis(1),
+  col = viridis::viridis(1),
   ylab = "",
   xlab = "",
   main = "",
@@ -78,8 +78,8 @@ png(
 hist(
   gamma,
   breaks = seq(from = 3, to = 33, by = 1),
-  border = "steelblue4",
-  col = "lightsteelblue1",
+  border = viridis::viridis(1),
+  col = viridis::viridis(1),
   ylab = "",
   xlab = "",
   main = "",
@@ -99,7 +99,7 @@ png(
 plot(
   omega,
   type = "l",
-  col = "steelblue1",
+  col = viridis::viridis(1),
   ylab = TeX("$\\omega^{(t)}$"),
   xlab = "t",
   main = ""
@@ -118,7 +118,7 @@ png(
 plot(
   gamma,
   type = "l",
-  col = "steelblue1",
+  col = viridis::viridis(1),
   ylab = TeX("$\\gamma^{(t)}$"),
   xlab = "t",
   main = ""
@@ -137,7 +137,7 @@ png(
 plot(
   theta,
   type = "l",
-  col = "steelblue1",
+  col = viridis::viridis(1),
   ylab = TeX("$\\theta^{(t)}$"),
   xlab = "t",
   main = ""

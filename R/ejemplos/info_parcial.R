@@ -44,16 +44,16 @@ curve(
   xlab = expression(lambda),
   ylab = "",
   yaxt = 'n',
-  col = "steelblue"
+  col = viridis::viridis(4)[[1]]
   )
-curve(log_lik_exact, from = 0.01, to = 0.3, add = TRUE, col = "forestgreen")
-curve(log_lik_drop, from = 0.01, to = 0.3, add = TRUE, col = "darkorange")
-lines(x = c(max.ver1, max.ver1), y = c(ymin, log_lik(max.ver1)), lty = 2, col = "steelblue")
-lines(x = c(max.ver2, max.ver2), y = c(ymin, log_lik_exact(max.ver2)), lty = 2, col = "forestgreen")
-lines(x = c(max.ver3, max.ver3), y = c(ymin, log_lik_drop(max.ver3)), lty = 2, col = "darkorange")
+curve(log_lik_exact, from = 0.01, to = 0.3, add = TRUE, col = viridis::viridis(4)[[2]])
+curve(log_lik_drop, from = 0.01, to = 0.3, add = TRUE, col = viridis::viridis(4)[[3]])
+lines(x = c(max.ver1, max.ver1), y = c(ymin, log_lik(max.ver1)), lty = 2, col = viridis::viridis(4)[[1]])
+lines(x = c(max.ver2, max.ver2), y = c(ymin, log_lik_exact(max.ver2)), lty = 2, col = viridis::viridis(4)[[2]])
+lines(x = c(max.ver3, max.ver3), y = c(ymin, log_lik_drop(max.ver3)), lty = 2, col = viridis::viridis(4)[[3]])
 abline(
   v = 0.1,
-  col = "gray80",
+  col = viridis::viridis(4)[[4]],
   lty = 2)
 
 dev.off()

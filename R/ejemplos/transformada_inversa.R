@@ -32,8 +32,8 @@ png(
 hist(
    x,
    probability = TRUE,
-   col = "lightsteelblue1",
-   border = "lightsteelblue1",
+   col = viridis::viridis(2)[[2]],
+   border = viridis::viridis(2)[[2]],
    xlim = c(0, 20),
    breaks = seq(from = 0, to = 24, by = 0.2),
    xlab = "",
@@ -46,7 +46,7 @@ curve(
    from = 0,
    to = max(x),
    add = TRUE,
-   col = "steelblue4",
+   col = viridis::viridis(2)[[1]],
    lwd = 2
    )
 dev.off()

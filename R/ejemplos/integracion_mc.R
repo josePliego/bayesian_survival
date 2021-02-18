@@ -68,7 +68,7 @@ png(
 plot(
   x,
   y,
-  col = alpha(if_else(y <= g(x), "lightsteelblue1", "gainsboro"), 0.5),
+  col = alpha(if_else(y <= g(x), viridis::viridis(3)[[1]], viridis::viridis(3)[[2]]), 0.5),
   pch = 20,
   xlab = "",
   ylab = ""
@@ -77,7 +77,7 @@ plot(
 curve(g(x),
       from = 0,
       to = 2, 
-      col = "steelblue4",
+      col = viridis::viridis(3)[[3]],
       add = TRUE,
       lwd = 2)
 

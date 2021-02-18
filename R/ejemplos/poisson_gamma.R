@@ -21,8 +21,8 @@ hist(
   x,
   breaks = seq(from = 0, to = 70, by = 2),
   probability = TRUE,
-  col = "lightsteelblue1",
-  border = "lightsteelblue1",
+  col = viridis::viridis(1),
+  border = viridis::viridis(1),
   main = "",
   xlab = "",
   ylab = ""
