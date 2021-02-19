@@ -957,16 +957,16 @@ Esta sección contiene la teoría mínima indispensable de cadenas de Markov par
 
 \textbf{Definición.} Sea $\lbrace X_t, t \in \mathbb{N} \cup \lbrace 0 \rbrace \rbrace$ un proceso estocástico con espacio de estados discreto. Se dice que este proceso es una cadena de Markov si 
 \begin{align*}
-P\lbrace X_{t+1} = j \ | \ X_t = i, X_{t-1} = i_{t-1}, \dots, X_0 = i_0\rbrace &= P\lbrace X_{t+1} = j \ | \ X_t = i\rbrace,
+P\left( X_{t+1} = j | X_t = i, X_{t-1} = i_{t-1}, \dots, X_0 = i_0\right) &= P\left( X_{t+1} = j \ | \ X_t = i\right),
 \end{align*}
 esto es, \textit{si fijando el presente, el futuro no depende del pasado.}
 
-Si $$P\lbrace X_{t+1} = j \ | \ X_t = i\rbrace = P_{ij},$$ independiente de $t$, se dice que la cadena de Markov tiene probabilidades de transición estacionarias. Una cadena de Markov con esta característica se dice que es homogénea. A partir de aquí, se hace referencia únicamente a cadenas homogéneas.
+Si $$P\left( X_{t+1} = j \ | \ X_t = i\right) = P_{ij},$$ independiente de $t$, se dice que la cadena de Markov tiene probabilidades de transición estacionarias. Una cadena de Markov con esta característica se dice que es homogénea. A partir de aquí, se hace referencia únicamente a cadenas homogéneas.
 
 \textbf{Definición.} Se define la \textit{probabilidad de transición en n pasos}, denotada $P_{ij}^n$, como
 \begin{align*}
-P_{ij}^n &= P\lbrace X_{m+n} = j \ | \ X_{m} = i\rbrace\\
-&= P\lbrace X_n = j \ | \ X_0 = i \rbrace,
+P_{ij}^n &= P\left( X_{m+n} = j \ | \ X_{m} = i\right)\\
+&= P\left( X_n = j \ | \ X_0 = i \right),
 \end{align*}
 donde la última igualdad se sigue de la homogeneidad de la cadena.
 
@@ -979,7 +979,7 @@ La comunicación de los estados define una relación de equivalencia (ver \citet
 
 \textbf{Definición.} Se define el \textit{tiempo de primer regreso al estado i} como $$T_i = \min_{t>0} \lbrace X_0 = i, X_t = i \rbrace.$$
 
-Si $P\lbrace T_i < \infty \rbrace = 1 $ entonces se dice que el estado $i$ es \textbf{recurrente}. En otro caso, se dice que el estado $i$ es transitorio. Además, si $i$ es un estado recurrente, se dice que éste es \textbf{recurrente positivo} si $E\left[T_i\right] < \infty$. En otro caso, se dice que $i$ es recurrente nulo.
+Si $P\left( T_i < \infty \right) = 1 $ entonces se dice que el estado $i$ es \textbf{recurrente}. En otro caso, se dice que el estado $i$ es transitorio. Además, si $i$ es un estado recurrente, se dice que éste es \textbf{recurrente positivo} si $E\left[T_i\right] < \infty$. En otro caso, se dice que $i$ es recurrente nulo.
 
 \textbf{Definición.} Se define el periodo del estado $i$, denotado $d(i)$, como el máximo común divisor de $\lbrace n\in \mathbb{N}: P_{ii}^n > 0\rbrace.$ Si $d(i)=1$, se dice que el estado $i$ es \textbf{aperiódico}.
 
@@ -1771,9 +1771,9 @@ Para realizar el primer paso, se necesita saber qué tipo de restricciones impon
 
 Ya que se conoce la cota, falta ver cómo obtener muestras de la gamma truncada. Sea $\lambda^*$ el límite superior del soporte de $\lambda_{jk}$. Se utiliza el hecho de que si $X \sim Ga(\alpha, 1)$, entonces $Y = X/\beta \sim Ga(\alpha, \beta)$. Sea $F$ la función de distribución de $X$ y $G$ la función de distribución de $Y$. Se tiene que
 \begin{align*}
-F(x) &= P\lbrace X \leq x\rbrace\\
-&= P\lbrace \beta Y \leq x \rbrace\\
-&= P\lbrace Y \leq x/\beta \rbrace\\
+F(x) &= P\left( X \leq x\right)\\
+&= P\left( \beta Y \leq x \right)\\
+&= P\left( Y \leq x/\beta \right)\\
 &= G(x/\beta).
 \end{align*}
 Por lo tanto, se tiene que $F(\lambda^* \beta) = G(\lambda^*)$. Para truncar el soporte de $Y$ a $(0, \lambda^*)$ se necesita reescalar la distribución. Si $Y^\prime$ es la variable aleatoria truncada y $G^\prime$ su función de distribución, entonces se tiene que $G^\prime (y) = \frac{1}{G(\lambda^*)} G(y)$ para $y \in \Omega_{Y^\prime}$. Finalmente, para utilizar el método de la transformación inversa, se simula $u\sim U(0, 1)$ y se toma $x$ tal que

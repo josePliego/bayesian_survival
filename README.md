@@ -1,9 +1,9 @@
-# Thesis on "A Bayesian Semi-Parametric Bivariate Failure Time Model" by Nieto-Barajas & Walker (2006)
+# Modelo de supervivencia basado en cópulas
 ## José Pliego San Martín
 
-## TODO's
-1. Investigar y escribir sobre integración Monte Carlo.
-2. Investigar y escribir sobre MCMC.
-3. Investigar y escribir sobre cópulas.
-4. Verificar los cálculos de cópulas del artículo.
-5. Investigar y escribir de modelos frailty.
+En este repositorio se encuentran los archivos que acompañan la tesis de licenciatura *Modelo de supervivencia basado en cópulas*. Los archivos fuente del escrito son:
++ Escrito completo: **docs/tesis_pliego.tex**
++ Bibliografía: **docs/tesis_bibliografia.bib**
++ Formato para referencias: **docs/apa-good.bst**
+
+También se incluyen los códigos que generan todas las gráficas del escrito en la carpeta **R/ejemplos**. Estos archivos están numerados según el orden en el que las figuras aparecen en el texto.
