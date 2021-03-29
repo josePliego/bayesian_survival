@@ -69,7 +69,8 @@
 %Figura
 \begin{figure}[h]
 \begin{center}
-\includegraphics{logo-ITAM_ch.jpg}
+%\includegraphics{logo-ITAM_ch.jpg}
+\centering\includegraphics[width=10cm]{logo-ITAM.png}
 \end{center}
 \end{figure}
 
@@ -81,13 +82,13 @@
 
 \textsc{que para obtener el título de}\\[1em]
 
-\textsc{LICENCIADO EN MATEMÁTICAS APLICADAS}\\[1em]
+\textsc{Licenciado en Matemáticas Aplicadas}\\[1em]
 
 \textsc{presenta}\\[1em]
 
-\textsc{\Large JOSÉ PLIEGO SAN MARTÍN}\\[1em]
+\textsc{\Large José Pliego San Martín}\\[1em]
 
-\textsc{\large Asesor: LUIS ENRIQUE NIETO BARAJAS}
+\textsc{\large Asesor: Dr. Luis Enrique Nieto Barajas}
 
 \end{center}
 
@@ -137,7 +138,7 @@
 \section{Introducción}
 \label{intro}
 
-Se conoce como análisis de supervivencia al análisis de variables aleatorias no negativas. Frecuentemente se trata del estudio del tiempo entre dos eventos, el evento de inicio y el evento de fin y los factores que los afectan. Algunos ejemplos son el tiempo que tarda un paciente entre que se contagia con cierta enfermedad y muere, el tiempo de recaída tras haber sido diagnosticado como curado, el tiempo de recuperación tras tomar un medicamento o el tiempo que tarda una máquina en dejar de funcionar \citep{moore}. En el análisis de supervivencia univariado es usual suponer que los tiempos de supervivencia entre individuos son independientes, sin embargo, existen situaciones en que este supuesto no se cumple. Algunos ejemplos son muestras que contienen individuos con estructuras genéticas similares (hermanos, padres e hijos) o distintas observaciones en un mismo individuo (ojos y riñones). Las técnicas de análisis de supervivencia multivariado se utilizan cuando puede existir algún tipo de asociación entre los tiempos de supervivencia \citep{klein}.
+Se conoce como análisis de supervivencia al análisis de variables aleatorias no negativas. Frecuentemente se trata del estudio del tiempo entre dos eventos, el evento de inicio y el evento de fin y los factores que los afectan. Algunos ejemplos son el tiempo que tarda un paciente entre que se contagia con cierta enfermedad y muere, el tiempo de recaída tras haber sido diagnosticado como curado, el tiempo de recuperación tras tomar un medicamento, el tiempo que tarda una máquina en dejar de funcionar o el tiempo que pasa entre el otorgamiento de un crédito y su incumplimiento \citep{moore}. En el análisis de supervivencia univariado es usual suponer que los tiempos de supervivencia entre individuos son independientes, sin embargo, existen situaciones en que este supuesto no se cumple como pueden ser muestras que contienen individuos con estructuras genéticas similares (hermanos, padres e hijos), distintas observaciones en un mismo individuo (ojos y riñones) o personas y empresas en un mismo sector económico. Las técnicas de análisis de supervivencia multivariado se utilizan cuando puede existir algún tipo de asociación entre los tiempos de supervivencia \citep{klein}.
 
 El objetivo de este trabajo es introducir al lector al modelo de supervivencia bivariado de \citet{nieto}, un modelo bayesiano que utiliza densidades marginales no paramétricas para mayor flexibilidad en la modelación, construye la densidad conjunta a través de una mezcla y se basa en teoría de cópulas para simplificar el estudio de la dependencia entre los tiempos de supervivencia. También se añadió la implementación del modelo de supervivencia al paquete de R \texttt{BGPhazard} de \citet{bgphazard}. Se decidió hacer la implementación en R porque es un lenguaje de programación popular con ciertas ventajas como las mencionadas por \citet{advanced_r}:
 \begin{enumerate}
@@ -148,9 +149,9 @@ El objetivo de este trabajo es introducir al lector al modelo de supervivencia b
 \end{enumerate}
 Por estas razones, el trabajo también busca alentar al lector que no conozca R a que lo utilice. Para demostrar la variedad de cosas que se pueden hacer con este lenguaje, se presentan ejemplos en todos los capítulos. El código de los ejemplos se encuentra en Github\footnote{\url{https://github.com/josbop/bayesian_survival}} para que el lector pueda replicarlos si así lo desea.
 
-La estructura de este trabajo es como sigue. Para comprender el modelo objeto de esta tesis \citep{nieto} es necesario que el lector sepa qué es y qué estudia el análisis de supervivencia. Este tema es tratado en el capítulo \ref{analisis_sup}. Se habla de qué son los datos de supervivencia, cómo se extrae información de datos que aportan información parcial, cómo estos datos se incorporan en la función de verosimilitud y se introduce uno de los modelos más comunes para incluir variables explicativas en el análisis. El resto de la teoría necesaria para comprender el modelo mencionado se presenta en el capítulo \ref{cap:cop}, con una introducción a cópulas y a la inferencia bayesiana.
+La estructura de este trabajo es como sigue. Para comprender el modelo de supervivencia objeto de esta tesis es necesario que el lector sepa qué es y qué estudia el análisis de supervivencia. Este tema es tratado en el capítulo \ref{analisis_sup}. Se habla de qué son los datos de supervivencia, cómo se extrae información de datos que aportan información parcial, cómo estos datos se incorporan en la función de verosimilitud y se introduce uno de los modelos más comunes para incluir variables explicativas en el análisis. El resto de la teoría necesaria para comprender el modelo mencionado se presenta en el capítulo \ref{cap:cop}, con una introducción a cópulas y a la inferencia bayesiana.
 
-Después de establecer las bases teóricas, es necesario que el lector comprenda cómo se trabaja con variables aleatorias y modelos probabilísticos en la computadora. Para esto, se dedica el capítulo \ref{simulacion} a introducir métodos de simulación de variables aleatorias: el método de la transformada inversa, métodos de aceptación y rechazo y métodos de Monte Carlo vía cadenas de Markov.
+Después de establecer las bases teóricas, es necesario que el lector comprenda cómo se trabaja con variables aleatorias y modelos probabilísticos en la computadora. Para esto, se dedica el capítulo \ref{simulacion} a introducir métodos de simulación de variables aleatorias: el método de la transformada inversa, métodos de aceptación y rechazo y métodos de Monte Carlo vía cadenas de Markov (MCMC, por sus siglas en inglés).
 
 Finalmente, en el capítulo \ref{elmodelo} se introduce el modelo de supervivencia de \citet{nieto}. Se habla de cómo se construye y por qué es útil. También se aplican los métodos de simulación del capítulo \ref{simulacion} para la implementación. Como se mencionó antes, esta implementación es a través de un paquete de R, por lo que se mencionan detalles de la programación y se presenta el código de algunas funciones. Al final de este capítulo se aplica el modelo al conjunto de datos analizado por \citet{nieto} para ejemplificarlo y comprobar que el código funciona correctamente.
 
@@ -160,47 +161,43 @@ El paquete \texttt{BGPhazard} \citep{bgphazard} se encuentra en CRAN\footnote{\u
 
 \section{Análisis de supervivencia} \label{analisis_sup}
 
-Como se mencionó en la introducción (capítulo \ref{intro}), el análisis de supervivencia se ocupa del análisis de variables aleatorias no negativas, usualmente el tiempo entre un evento de inicio y un evento de fin.  La principal diferencia entre las técnicas de análisis de supervivencia y otras técnicas estadísticas es la presencia de información parcial o incompleta, como las observaciones censuradas o truncadas que se definen más adelante. Los tiempos pueden ser medidos en escala continua o discreta.  En este trabajo se habla únicamente de tiempos medidos en una escala continua.
+Como se mencionó en la introducción, el análisis de supervivencia estudia variables aleatorias no negativas, usualmente el tiempo que transcurre entre la ocurrencia de dos eventos.  La principal diferencia entre las técnicas de análisis de supervivencia y otras técnicas estadísticas es la presencia de información parcial o incompleta, como las observaciones censuradas o truncadas que se definen más adelante. Los tiempos pueden ser medidos en escala continua o discreta.  En este trabajo se habla únicamente de tiempos medidos en una escala continua. Los conceptos presentados en este capítulo se pueden consultar con mayor detalle en \citet{klein}.
 
-En análisis de supervivencia es común trabajar con funciones distintas a la densidad y la distribución, que son las más frecuentes en otros análisis. Las funciones de interés suelen ser la \textbf{función de supervivencia}, la \textbf{función de riesgo} y la \textbf{función de riesgo acumulado}. A continuación definimos estas funciones para el caso continuo \citep{klein}.
+En el análisis de supervivencia es común trabajar con funciones distintas a la densidad y la distribución, que son las más frecuentes en otros análisis. Las funciones de interés suelen ser la \textbf{función de supervivencia}, la \textbf{función de riesgo} y la \textbf{función de riesgo acumulado}. A continuación se definen estas funciones para el caso continuo.
 
 \textbf{Definición.} Sea $T$ una variable aleatoria no negativa con función de distribución $F$. Se definen las siguientes funciones:
 \begin{enumerate}
-\item Función de supervivencia $S(t) = 1-F(t) = P\left( T > t \right)$ es la probabilidad de que el tiempo de supervivencia sea mayor al tiempo $t$.
-\item Función de riesgo $h(t) = \lim_{\epsilon \to 0} \frac{1}{\epsilon}P\left( t<T\leq t+\epsilon \ | \ T \geq t \right)$  es la tasa instantánea de fallo al tiempo $t$, dado que se ha sobrevivido al tiempo $t$.
-\item Función de riesgo acumulado $H(t) = \int_0^t h(u) \ du$ mide la acumulación de la tasa de riesgo $h$ hasta el tiempo $t$.
+\item Función de supervivencia. Se define como $$S(t) = 1-F(t) = P\left( T > t \right)$$ y se refiere a la probabilidad de que el tiempo de supervivencia sea mayor al tiempo $t$.
+\item Función de riesgo. Se define como $$h(t) = \lim_{\epsilon \to 0} \frac{1}{\epsilon}P\left( t<T\leq t+\epsilon \ | \ T \geq t \right)$$ y se refiere a la tasa instantánea de fallo al tiempo $t$, dado que se ha sobrevivido al tiempo $t$.
+\item Función de riesgo acumulado. Se define como $H(t) = \int_0^t h(u) \ du$ y mide la acumulación de la tasa de riesgo $h$ hasta el tiempo $t$.
 \end{enumerate}
-Con estas definiciones se pueden demostrar las siguientes relaciones entre las funciones:
-\begin{itemize}
-\item $h(t) = \frac{f(t)}{S(t)} = -\frac{d}{dt}\log(S(t))$
-\item $S(t) = \exp \left(-\int_0^t h(u) \ du\right) = \exp(-H(t)).$
-\end{itemize}
+Con estas definiciones se puede demostrar la siguiente relación entre la función de riesgo y la función de supervivencia: $$h(t) = \frac{f(t)}{S(t)} = -\frac{d}{dt}\log(S(t)).$$
 
-Algunas de las familias paramétricas más utilizadas en análisis de supervivencia para variables continuas son la exponencial, Weibull, log-normal, log-logística y gamma. Estas familias permiten modelar comportamientos distintos de la función de riesgo, como tasas constantes, crecientes o decrecientes según se requiera. Si el lector quiere consultar más información sobre estas familias paramétricas o sobre las funciones de supervivencia, riesgo y riesgo acumulado, se recomienda ver \citet{klein}.
+Algunas de las familias paramétricas más utilizadas en análisis de supervivencia para variables continuas son la exponencial, Weibull, log-normal, log-logística y gamma. Estas familias permiten modelar comportamientos distintos de la función de riesgo, como tasas constantes, crecientes o decrecientes según se requiera.
 
 \subsection{Datos censurados}
 
-Se dice que una observación es censurada cuando no se conoce el tiempo exacto de fallo y únicamente se sabe que ocurrió en cierto intervalo. Se distinguen tres tipos de censura: censura por derecha, censura por izquierda y censura por intervalo \citep{klein}.
+Se dice que una observación es censurada cuando no se conoce el tiempo exacto de fallo y únicamente se sabe que ocurrió en cierto intervalo. Se distinguen tres tipos de censura: censura por derecha, censura por izquierda y censura por intervalo.
 
-Un dato está censurado por la derecha cuando solamente se observa un tiempo $C$, menor al tiempo de fallo exacto $T$. Se pueden distinguir tres mecanismos de censura por la derecha: tipo I, tipo II y censura aleatoria. La censura tipo I es cuando los datos exactos son observables solamente si son menores a un tiempo \textit{predeterminado} de censura, por ejemplo, antes de finalizar un estudio. La censura tipo II se presenta cuando un estudio continua hasta que $r$ de los $n$ $(r<n)$ individuos presentan el tiempo de fallo. En este caso, los $n-r$ tiempos de fallo restantes son censurados por derecha. A diferencia de la censura tipo I, el tiempo de censura $C$ es aleatorio ya que es igual al $r-$ésimo tiempo de fallo. Por último, la censura aleatoria se presenta cuando el tiempo de censura de cada individuo es considerado una variable aleatoria, la cual puede o no ser independiente del tiempo de fallo \citep{klein}.
+Un dato está censurado por la derecha cuando solamente se observa un tiempo $C$, menor al tiempo de fallo exacto $T$. Se pueden distinguir tres mecanismos de censura por la derecha: tipo I, tipo II y censura aleatoria. La censura tipo I es cuando los datos exactos son observables solamente si son menores a un tiempo \textit{predeterminado} de censura, por ejemplo, antes de finalizar un estudio. La censura tipo II se presenta cuando un estudio continua hasta que $r$ de los $n$ $(r<n)$ individuos presentan el tiempo de fallo. En este caso, los $n-r$ tiempos de fallo restantes son censurados por derecha. A diferencia de la censura tipo I, el tiempo de censura $C$ es aleatorio ya que es igual al $r-$ésimo tiempo de fallo. Por último, la censura aleatoria se presenta cuando el tiempo de censura de cada individuo es considerado una variable aleatoria, la cual puede o no ser independiente del tiempo de fallo.
 
-La censura por izquierda se presenta cuando solamente se sabe que el tiempo de fallo ocurrió antes de un tiempo observado $C$. Esto puede suceder, por ejemplo, cuando un instrumento de medición tiene un límite mínimo de detección y cualquier observación por debajo de este límite es reportada como un cero. En este caso, únicamente se conoce que la observación real es menor al límite mínimo de detección, por lo que es un dato censurado por izquierda \citep{klein}.
+La censura por la izquierda se presenta cuando solamente se sabe que el tiempo de fallo ocurrió antes de un tiempo observado $C$. Esto puede suceder, por ejemplo, cuando un instrumento de medición tiene un límite mínimo de detección y cualquier observación por debajo de este límite es reportada como un cero. En este caso, únicamente se conoce que la observación real es menor al límite mínimo de detección, por lo que es un dato censurado por izquierda.
 
-La censura por intervalo, como su nombre lo dice, se presenta cuando solamente se sabe que una observación se encuentra dentro de un intervalo de tiempo pero no se conoce con precisión. Esto puede suceder cuando pacientes son monitoreados periódicamente. Un paciente puede llegar a la primera consulta sin presentar el evento de fallo y ya haberlo presentado para la segunda consulta. En este caso se sabe nada más que el tiempo de fallo se encuentra entre la primera y la segunda consulta \citep{klein}. 
+La censura por intervalo, como su nombre lo dice, se presenta cuando solamente se sabe que una observación se encuentra dentro de un intervalo de tiempo pero no se conoce con precisión. Esto puede suceder cuando pacientes son monitoreados periódicamente. Un paciente puede llegar a la primera consulta sin presentar el evento de fallo y ya haberlo presentado para la segunda consulta. En este caso se sabe nada más que el tiempo de fallo se encuentra entre la primera y la segunda consulta. 
 
 \subsection{Datos truncados}
 \label{sec:truncados}
 
-El truncamiento se presenta cuando el tiempo de fallo solamente es observable si se presenta entre dos eventos $U$ y $V$. En caso contrario, el individuo no aporta información para el investigador y \textbf{no es de interés en el estudio.} Las observaciones pueden ser truncadas por la derecha y por la izquierda \citep{klein}.
+El truncamiento se presenta cuando el tiempo de fallo solamente es observable si se presenta entre dos eventos $U$ y $V$. En caso contrario, el individuo no aporta información para el investigador y \textbf{no es de interés en el estudio.} Las observaciones pueden ser truncadas por la derecha y por la izquierda.
 
-El truncamiento por la izquierda se presenta cuando, para ser considerado en el estudio, el tiempo de fallo de un individuo debe ser posterior  a la ocurrencia de un evento $U$. Un ejemplo son los estudios de supervivencia de adultos mayores. Los individuos solamente son considerados si ya sobrevivieron hasta cierta edad, por ejemplo 60 años. Cualquier persona menor a 60 años no es de interés para el investigador. El truncamiento por derecha ocurre cuando un tiempo de fallo es observable solamente si su ocurrencia es previa a un evento $V$. Un ejemplo es la distancia de las estrellas a la Tierra. Una estrella que se encuentra más lejos de lo que pueden detectar los telescopios modernos no será observable y no es de interés para el investigador. Una observación puede ser truncada por izquierda y por derecha. En este caso se dice que se cuenta con truncamiento por intervalo \citep{klein}.
+El truncamiento por la izquierda se presenta cuando, para ser considerado en el estudio, el tiempo de fallo de un individuo debe ser posterior  a la ocurrencia de un evento $U$. Un ejemplo son los estudios de supervivencia de adultos mayores. Los individuos solamente son considerados si ya sobrevivieron hasta cierta edad, por ejemplo 60 años. Cualquier persona menor a 60 años no es de interés para el investigador. El truncamiento por derecha ocurre cuando un tiempo de fallo es observable solamente si su ocurrencia es previa a un evento $V$. Un ejemplo es la distancia de las estrellas a la Tierra. Una estrella que se encuentra más lejos de lo que pueden detectar los telescopios modernos no será observable y no es de interés para el investigador. Una observación puede ser truncada por izquierda y por derecha. En este caso se dice que se cuenta con truncamiento por intervalo.
 
 \subsection{Construcción de la función de verosimilitud}
 \label{sec:ver}
 
 El método más utilizado para obtener estimaciones de parámetros poblacionales de interés es el método de máxima verosimilitud. Para utilizar este método es necesario construir la función de verosimilitud, que se puede entender como la distribución conjunta de las observaciones vista como función de los parámetros. En el caso más común cuando se cuenta con una muestra aleatoria $T_1, T_2, \dots, T_n$ de observaciones de un modelo paramétrico $f(t|\theta)$ y todas las observaciones son exactas, la función de verosimilitud es $$\mathcal{L}(\theta) = \prod_{i = 1}^n f(t_i|\theta).$$ Es de interés ahora construir la función de verosimilitud cuando algunos datos aportan información parcial, es decir, cuando hay observaciones censuradas y/o truncadas. Siguiendo las ideas presentadas en \citet{klein}, se considera la información parcial que aportan las observaciones para construir la verosimilitud. La contribución a la verosimilitud según el tipo de información aportada se presenta en el cuadro \ref{tab:lik}.
 
-\begin{table}[ht]
+\begin{table}[htb]
 \begin{center}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{ |c|c|c| } 
@@ -231,14 +228,14 @@ El método más utilizado para obtener estimaciones de parámetros poblacionales
 
 Siguiendo la lógica del cuadro \ref{tab:lik} se pueden incluir observaciones que aporten otro tipo de información parcial. Por ejemplo, si una observación es truncada por la izquierda y censurada por la derecha, entonces la información que aporta es $T_i>C_i \ | \ T_i > U_i$ y su contribución a la verosimilitud $\mathcal{L}(\theta)$ es $S(C_i)/S(U_i)$.
 
-Es muy importante resaltar que las observaciones truncadas y censuradas no son datos faltantes. Éstas aportan información sobre la variable de interés, por lo que no incorporarlas a la función de verosimilitud sería desechar información relevante. Por otro lado, tomar estas observaciones como si fueran datos exactos es incorrecto ya que puede sesgar la inferencia realizada sobre parámetros de interés. Para reforzar este punto, se presenta a continuación un ejemplo artificial creado en R.
+Es muy importante resaltar que las observaciones truncadas y censuradas no son datos faltantes. Éstas aportan información sobre la variable de interés, por lo que no incorporarlas a la función de verosimilitud sería desechar información relevante. Por otro lado, tomar estas observaciones como si fueran datos exactos es incorrecto ya que puede sesgar la inferencia realizada sobre parámetros de interés. Para reforzar este punto, se presenta a continuación una simulación en R.
 
 \newpage
 
-Supóngase que se tienen tiempos de fallo con una distribución exponencial $T \sim Exp(\lambda = 1/10)$ con $E[T] = \lambda^{-1} = 10$. Se simula una muestra aleatoria de 10 mil observaciones de $T$. Luego, suponga el lector que el monitoreo en el estudio finalizó al tiempo $T = 15$, por lo que todos los individuos con un tiempo de fallo mayor a 15 están censurados por la derecha con un tiempo de censura $C = 15$. Cuando se trabaja con observaciones censuradas y truncadas, es necesario saber cuáles de las observaciones son de este tipo. Cuando solamente se tiene censura por la derecha, es común encontrar las observaciones de $T$ acompañadas de una variable indicadora $\delta$, donde $$\delta_i = \begin{cases}
+Supóngase que se tienen tiempos de fallo con una distribución exponencial $T \sim Exp(\lambda = 1/10)$ con $E[T] = \lambda^{-1} = 10$. Se simula una muestra aleatoria de 10 mil observaciones de $T$. Luego, si se supone que el monitoreo en el estudio finalizó al tiempo $t = 15$, todos los individuos con un tiempo de fallo mayor a 15 están censurados por la derecha con un tiempo de censura $C = 15$. Cuando se trabaja con observaciones censuradas y truncadas, es necesario saber cuáles de las observaciones son de este tipo. Cuando solamente se tiene censura por la derecha, es común encontrar las observaciones de $T$ acompañadas de una variable indicadora $\delta$, donde $$\delta_i = \begin{cases}
 1, & \text{si } t_i \text{ es exacto},\\
-0, & \text{si } t_i \text{ es censurado por derecha}
-\end{cases}.$$ Utilizando esta notación y suponiendo que los datos provienen de un modelo exponencial $T\sim Exp(\lambda)$ con el parámetro $\lambda$ desconocido, se tiene que la función de log-verosimilitud para $\lambda$ está dada por $$l(\lambda) = \log (\lambda) \sum_{i = 1}^n \delta_i - \lambda \left(\sum_{i: \delta_i = 1} t_i + \sum_{i: \delta_i = 0} C_i\right).$$ En la figura \ref{fig:lik} se presenta una gráfica de las funciones de log-verosimilitud con su respectivo estimador de máxima verosimilitud, en los siguientes tres casos:
+0, & \text{si } t_i \text{ es censurado por derecha}.
+\end{cases}$$ Utilizando esta notación se tiene que para un modelo exponencial con parámetro desconocido la función de log-verosimilitud está dada por $$l(\lambda) = \log (\lambda) \sum_{i = 1}^n \delta_i - \lambda \left(\sum_{i: \delta_i = 1} t_i + \sum_{i: \delta_i = 0} C_i\right).$$ En la figura \ref{fig:lik} se presentan las funciones de log-verosimilitud con su respectivo estimador de máxima verosimilitud (líneas punteadas verticales), en los siguientes tres casos:
 \begin{enumerate}
 \item $\hat{\lambda}_1$ incorporando la información de censura,
 \item $\hat{\lambda}_2$ suponiendo erróneamente que todos los datos son exactos,
@@ -251,6 +248,8 @@ Supóngase que se tienen tiempos de fallo con una distribución exponencial $T \
 \label{fig:lik}
 \end{figure}
 
+
+
 Se puede apreciar claramente en la figura \ref{fig:lik} que el estimador que incorpora la información de censura es el más cercano al valor real. El estimador $\hat{\lambda}_2$ sobrestima el valor real del parámetro ya que se están tomando como exactos los datos censurados por la derecha (recordemos que $E[T] = 1/\lambda$), mientras que el estimador $\hat{\lambda}_3$ está descartando todos los valores $t_i > 15$, por lo que el parámetro también es sobrestimado. El código para reproducir este ejemplo se puede encontrar en el apéndice \ref{ap:lik}.
 
 \citet{kaplan-meier} introdujeron una de las técnicas más utilizadas en el análisis de supervivencia, el estimador producto-límite, también conocido como el \textbf{estimador Kaplan-Meier}. Este estimador permite aproximar funciones de supervivencia en presencia de observaciones exactas y censuradas por la derecha. El estimador Kaplan-Meier es un estimador no paramétrico de la función de supervivencia, es decir, no depende de suponer una familia específica para la distribución de los tiempos de fallo. Si la variable de interés es continua, el estimador producto-límite es
@@ -258,44 +257,32 @@ Se puede apreciar claramente en la figura \ref{fig:lik} que el estimador que inc
 \label{eq:km}
 \hat{S}(t) = \prod_{i: t_i \leq t} \left( 1-\frac{d_i}{n_i}\right),
 \end{equation}
-donde $d_i$ es el número de tiempos de falla iguales a $t_i$ y $n_i$ es el número de individuos en riesgo al tiempo $t_i$. Esto significa que el estimador Kaplan-Meier es una función escalonada con saltos en cada tiempo de falla exacto. Además, en \cite{kaplan-meier} los autores demuestran que este estimador es el estimador de máxima verosimilitud para $S$.
+donde $d_i$ es el número de tiempos de falla iguales a $t_i$ y $n_i$ es el número de individuos en riesgo al tiempo $t_i$, por lo que el estimador Kaplan-Meier es una función escalonada con saltos en cada tiempo de falla exacto. Además, es el estimador de máxima verosimilitud para $S$.
 
- En R se puede calcular el estimador producto-límite utilizando la función \texttt{survfit} del paquete \texttt{survival} \citep{survival-book}. Se presenta un ejemplo utilizando el conjunto de datos \texttt{aml} del mismo paquete. La base \texttt{aml} cuenta con información sobre 23 pacientes que padecen leucemia mieloide aguda. De estos 23 individuos, 18 presentaron el evento de falla (muerte) en el tiempo de estudio y 5 son censurados por la derecha. Además se tiene una variable adicional que indica si el paciente recibió ciclos adicionales de quimioterapia. El interés del estudio era analizar si estos ciclos adicionales de quimioterapia afectaban la distribución de los tiempos de supervivencia. En el cuadro \ref{cod:km} se presenta el código para obtener el estimador Kaplan-Meier en dos casos. Primero, para todos los pacientes en la muestra (figura \ref{fig:km1}). En el segundo caso, se obtiene un estimador para los pacientes que recibieron ciclos adicionales de quimioterapia y otro para los que no (figura \ref{fig:km2}). Es interesante notar que el paciente con el mayor tiempo de fallo ($t = 161$) presenta censura por la derecha, por lo que los estimadores producto-límite que involucran a este individuo nunca caen a cero.
-
-\begin{table}[htb]
+ \begin{table}[htb]
 \begin{lstlisting}
 library(survival)
 
 dt_aml <- survival::aml
 
 times <- Surv(dt_aml$time, dt_aml$status)
-
-km1 <- survfit(times ~ 1, conf.type = "none")
 km2 <- survfit(times ~ dt_aml$x, conf.type = "none")
-
-plot(km1, lwd = 1.5, conf.int = FALSE, col = "steelblue")
 
 plot(km2, lwd = 1.5, conf.int = FALSE, col = c("forestgreen", "darkorange"))
 \end{lstlisting}
-\caption{Código para obtener el estimador Kaplan-Meier en R.}
+\caption{Código para obtener los estimadores Kaplan-Meier en R.}
 \label{cod:km}
 \end{table}
 
-La figura \ref{fig:km2} parece indicar que los pacientes que recibieron ciclos adicionales de quimioterapia tienen un aumento importante en la función de supervivencia. Para sustentar esta evidencia visual se podrían calcular intervalos de confianza sobre los estimadores o una prueba de hipótesis sobre la diferencia entre las funciones de supervivencia. Para una explicación más extensa del estimador, refiérase el lector a \citet{kaplan-meier}. En \citet{moore} se puede encontrar más información sobre los intervalos de confianza para el estimador y cómo obtenerlos en R. También se recomienda consultar la documentación de la función \texttt{survfit} en R con el comando \texttt{?survfit}. Finalmente, \citet{klein} contiene más información sobre los intervalos de confianza y las pruebas de hipótesis mencionadas.
-
- \begin{figure}[htb]
-\centering\includegraphics[width=9cm]{km1.png}
-\caption{Estimador Kaplan-Meier para los 23 pacientes del estudio.}
-\label{fig:km1}
-\end{figure}
-
-\begin{figure}[htb]
+ En R se puede calcular el estimador producto-límite utilizando la función \texttt{survfit} del paquete \texttt{survival}, ver \citet{survival-book}. Se presenta un ejemplo utilizando el conjunto de datos \texttt{aml} del mismo paquete. La base \texttt{aml} cuenta con información sobre 23 pacientes que padecen leucemia mieloide aguda. De estos 23 individuos, 18 presentaron el evento de falla (muerte) en el tiempo de estudio y 5 son censurados por la derecha. Además se tiene una variable adicional que indica si el paciente recibió ciclos adicionales de quimioterapia. El interés del estudio era analizar si estos ciclos adicionales de quimioterapia afectaban la distribución de los tiempos de supervivencia (medidos en semanas). En el cuadro \ref{cod:km} se presenta el código para obtener dos estimadores Kaplan-Meier, uno para los pacientes que recibieron ciclos adicionales de quimioterapia y otro para los que no (figura \ref{fig:km2}). Es interesante notar que el paciente con el mayor tiempo de fallo ($t = 161$ semanas) presenta censura por la derecha, por lo que los estimadores producto-límite que involucran a este individuo nunca caen a cero.
+ 
+ \begin{figure}[hbt]
 \centering\includegraphics[width=9cm]{km2.png}
 \caption{Estimadores Kaplan-Meier para los 11 pacientes que recibieron ciclos adicionales de quimioterapia (morado) y para los 12 que no (amarillo).}
 \label{fig:km2}
 \end{figure}
 
-\clearpage
+La figura \ref{fig:km2} parece indicar que los pacientes que recibieron ciclos adicionales de quimioterapia tienen un aumento importante en la función de supervivencia. Para sustentar esta evidencia visual se podrían calcular intervalos de confianza sobre los estimadores o una prueba de hipótesis sobre la diferencia entre las funciones de supervivencia. Para una explicación más extensa del estimador, ver \citet{kaplan-meier}. En \citet{moore} se puede encontrar más información sobre los intervalos de confianza para el estimador y cómo obtenerlos en R. También se recomienda consultar la documentación de la función \texttt{survfit} en R con el comando \texttt{?survfit}. Finalmente, \citet{klein} contiene más información sobre los intervalos de confianza y las pruebas de hipótesis mencionadas.
 
 \subsection{Modelo de regresión de Cox}
 \label{seccion_coxph}
@@ -303,7 +290,7 @@ El modelo presentado en \citet{cox} explica cómo describir la función de riesg
 \begin{equation} \label{cox_ph}
 h_j(t) = h_0(t)e^{z_j^\prime \beta},
 \end{equation}
-donde $z_j^\prime$ se refiere al vector de covariables transpuesto, $\beta\in \mathbb{R}^p$ es el vector de coeficientes y $h_0$ es una función de riesgo base, común a todos los individuos, que describe a un hipotético individuo para el cual $z = 0$. En el caso específico en que $z$ sea una variable indicadora para distinguir un grupo control y un grupo piloto, $h_0$ es la función de riesgo para los individuos en el grupo control y $e^\beta$ es la constante por la cual se multiplica la función de riesgo de los individuos en el grupo piloto.
+donde la notación $z_j^\prime$ se refiere al vector transpuesto de $z_j$, $\beta\in \mathbb{R}^p$ es el vector de coeficientes y $h_0$ es una función de riesgo base, común a todos los individuos, que describe a un hipotético individuo para el cual $z = 0$. En el caso específico en que $z$ sea una variable indicadora para distinguir un grupo control y un grupo piloto, $h_0$ es la función de riesgo para los individuos en el grupo control y $e^\beta$ es la constante por la cual se multiplica la función de riesgo de los individuos en el grupo piloto.
 
 Es común encontrar este modelo en la literatura bajo el nombre de \textbf{modelo de riesgos proporcionales de Cox}, pero este nombre solamente es aplicable a un caso específico de los que se consideran en \citet{cox}. Específicamente, si se cumple que el vector de covariables no depende del tiempo, entonces se tiene que para dos individuos $i, j$
 \begin{align}
@@ -314,15 +301,15 @@ Es común encontrar este modelo en la literatura bajo el nombre de \textbf{model
 que es una constante como función del tiempo. Además, tomando logaritmo de ambos lados se tiene que
 $$\log \left(\frac{h_j(t)}{h_i(t)}\right) = z^{*\prime} \beta,$$ donde $z^* = z_j-z_i$. Esto es un modelo lineal en los parámetros para el logaritmo de la razón de tasas de riesgo.
 
-Es importante hacer énfasis en que el supuesto de proporcionalidad entre las funciones de riesgo se debe cumplir para utilizar el modelo con covariables independientes del tiempo. Sin embargo, el autor señala que se puede introducir esta dependencia del tiempo para describir comportamientos distintos a la multiplicación de las tasas de riesgo \citep{cox}. En ese caso el modelo queda de la forma
+Es importante hacer énfasis en que el supuesto de proporcionalidad entre las funciones de riesgo se debe cumplir para utilizar el modelo con covariables independientes del tiempo. Sin embargo, el autor señala que se puede introducir esta dependencia del tiempo para describir comportamientos distintos a la multiplicación de las tasas de riesgo. En ese caso el modelo queda de la forma
 \begin{equation*}
 h_j(t) = h_0(t)e^{z_j(t)^\prime \beta}.
 \end{equation*}
 
-Igualmente novedoso fue el método que presentó en \citet{cox} para la estimación de los coeficientes sin hacer supuestos sobre la función de riesgo base $h_0$. El autor se refiere a una \textit{verosimilitud condicional}. En la literatura es común encontrar este mismo método bajo el nombre de \textit{verosimilitud parcial}. Estos nombres se deben a que \textit{"los intervalos de tiempo en que no se presentan fallas no aportan información sobre $\beta$, ya que en estos intervalos bien podría pasar que $h_0$ sea idéntica a cero"} \citep{cox}. Es por esto que el autor obtiene la función de verosimilitud en los tiempos de falla $\lbrace t_{(i)} \rbrace$, condicionando sobre los individuos en riesgo en ese tiempo, denotados $\mathcal{R}(t_{(i)})$. Cuando no hay empates en los tiempos de falla, la función de verosimilitud parcial es entonces de la forma
-$$\mathcal{L}(\beta) = \prod_{i=1}^n \left(\frac{\exp (z_i^\prime \beta)}{\sum_{l\in \mathcal{R}(t_{(i)})}\exp (z_l^\prime \beta)}\right).$$ A partir de aquí se puede obtener el estimador de máxima verosimilitud $\hat{\beta}$.
+También en \citet{cox} se presenta el método de \textit{verosimilitud condicional} para la estimación de los coeficientes sin hacer supuestos sobre la función de riesgo base $h_0$. En la literatura es común encontrar este mismo método bajo el nombre de \textit{verosimilitud parcial}. Estos nombres se deben a que \textit{"los intervalos de tiempo en que no se presentan fallas no aportan información sobre $\beta$, ya que en estos intervalos bien podría pasar que $h_0$ sea idéntica a cero"}. Es por esto que el autor obtiene la función de verosimilitud en los tiempos de falla $\lbrace t_{i} \rbrace$, condicionando sobre los individuos en riesgo en ese tiempo, denotados $\mathcal{R}(t_{i})$. Cuando no hay empates en los tiempos de falla, la función de verosimilitud parcial es entonces de la forma
+$$\mathcal{L}(\beta) = \prod_{i=1}^n \left(\frac{\exp (z_i^\prime \beta)}{\sum_{l\in \mathcal{R}(t_{i})}\exp (z_l^\prime \beta)}\right).$$ A partir de aquí se puede obtener el estimador de máxima verosimilitud $\hat{\beta}$.
 
-Es importante resaltar que esta forma de la función de verosimilitud se da cuando no hay empate en los tiempos de falla. En teoría, si la variable de interés es continua, que dos eventos se presenten al mismo tiempo es un evento de probabilidad cero. Sin embargo, en la práctica, estos empates se pueden observar debido al redondeo de los tiempos de fallo o a una verdadera naturaleza discreta en la variable de interés. Algunos métodos para lidiar con estos empates son el método marginal, el exacto, el de Breslow y el de Efron. Una explicación breve de estos métodos se puede encontrar \citet{moore}.
+Es importante resaltar que esta forma de la función de verosimilitud se da cuando no hay empate en los tiempos de falla. En teoría, si la variable de interés es continua, que dos eventos se presenten al mismo tiempo es un evento de probabilidad cero. Sin embargo, en la práctica, estos empates se pueden observar debido al redondeo de los tiempos de fallo o a una verdadera naturaleza discreta en la variable de interés. Algunos métodos para lidiar con estos empates son el método marginal, el exacto, el de Breslow y el de Efron. Una explicación breve de estos métodos se puede encontrar en \citet{moore}.
 
 Ahora se presenta una aplicación en R del modelo de riesgos proporcionales utilizando el conjunto de datos \texttt{aml} introducido en la sección \ref{sec:truncados}. La intención es cuantificar el efecto de los ciclos adicionales de quimioterapia sobre las funciones de riesgo de los pacientes. Primero, se transforma la variable explicativa en una variable indicadora, haciendo explícitamente grupo base o control a los pacientes que no recibieron ciclos adicionales de tratamiento.
 
@@ -331,11 +318,11 @@ Antes de ajustar el modelo se debe checar que se cumple la hipótesis de riesgos
 S_1(t) = S_0(t) ^ {\exp (\beta)} &\implies \log (S_1(t)) = e^\beta \ \log (S_0(t))\\
 &\implies \log (-\log (S_1(t))) = \beta + \log (-\log (S_0(t))).
 \end{align*}
-Es decir, que si se grafica $\log (-\log (S_1(t)))$ y $\log (-\log (S_0(t)))$ contra $t$ o $\log (t)$, bajo el supuesto de riesgos proporcionales se deben ver dos líneas paralelas, separadas por $\beta$. La figura \ref{fig:coxph} presenta esta gráfica utilizando los estimadores Kaplan-Meier de la sección \ref{sec:truncados}.
+Es decir, que si se grafican las funciones $\log (-\log (S_1(t)))$ y $\log (-\log (S_0(t)))$ contra $t$ o $\log (t)$, bajo el supuesto de riesgos proporcionales se deben ver dos líneas paralelas, separadas por $\beta$. La figura \ref{fig:coxph} presenta esta gráfica utilizando los estimadores Kaplan-Meier de la sección \ref{sec:truncados}.
 
 \begin{figure}[htb]
 \centering\includegraphics[width=10cm]{prop_haz_km.png}
-\caption{Estimadores Kaplan-Meier para el grupo control (naranja) y piloto (verde). }
+\caption{Estimadores Kaplan-Meier para el grupo control (amarillo) y piloto (morado). }
 \label{fig:coxph}
 \end{figure}
 
@@ -367,11 +354,11 @@ summary(model)
 
 \newpage
 
-El modelo arroja una estimación puntual de $\hat{\beta} = -0.9155$. Para interpretar este coeficiente, diríjase el lector a la ecuación \ref{eq:prop_haz}. Se tiene que $$\frac{h_1(t)}{h_0(t)} = e^{-0.9155} = 0.4003,$$ es decir, que la tasa de riesgo para el grupo control es aproximadamente 2.5 veces mayor que la del grupo piloto. Este resultado parece indicar una disminución considerable en la tasa de riesgo para los pacientes que reciben ciclos adicionales de quimioterapia. Se aconseja al lector consultar los resultados completos del modelo con el comando \texttt{summary(model)} ya que también cuenta con un intervalo de confianza y un valor p para el coeficiente en cuestión, además de diversas pruebas estadísticas sobre la función de verosimilitud parcial.
+El modelo arroja una estimación puntual de $\hat{\beta} = -0.9155$. Por la ecuación \eqref{eq:prop_haz} se tiene que $$\frac{h_1(t)}{h_0(t)} = e^{-0.9155} = 0.4003,$$ es decir, que la tasa de riesgo para el grupo control es aproximadamente 2.5 veces mayor que la del grupo piloto. Este resultado parece indicar una disminución considerable en la tasa de riesgo para los pacientes que reciben ciclos adicionales de quimioterapia.
 
 \newpage
 
-Para un mayor estudio del modelo de riesgos proporcionales se recomienda al lector dirigirse a \citet{cox}. Para mayor información sobre pruebas de hipótesis para los coeficientes o la verosimilitud parcial se recomienda consultar \citet{klein}. Más detalles sobre la implementación en R se pueden encontrar en \citet{moore}.
+Para un mayor estudio del modelo de riesgos proporcionales se recomienda consultar \citet{cox}. Para mayor información sobre pruebas de hipótesis para los coeficientes o la verosimilitud parcial ver \citet{klein}. Más detalles sobre la implementación en R se pueden encontrar en \citet{moore}.
 
 \newpage
 \clearpage
@@ -383,7 +370,7 @@ En este capítulo se complementa la teoría del análisis de supervivencia con u
 \label{cap:cop}
 \subsection{Cópulas} \label{sec_copulas}
 
-Las cópulas son funciones que se utilizan para construir distribuciones conjuntas a través de sus distribuciones univariadas. También se pueden entender las cópulas como funciones de distribución multivariadas con marginales uniformes en el intervalo cero uno $U(0, 1)$ \citep{nelsen}. Formalmente, se tiene la siguiente definición.
+Las cópulas son funciones que se utilizan para construir distribuciones conjuntas a través de sus distribuciones univariadas. También se pueden entender las cópulas como funciones de distribución multivariadas con marginales uniformes en el intervalo unitario $(0,1)$ (denotada $U(0, 1)$), \citep{nelsen}. Formalmente, se tiene la siguiente definición.
 
 \textbf{Definición.} Una cópula $C$ es una función 
 \begin{align*}
@@ -391,16 +378,16 @@ C: [0,1]\times[0,1]&\to [0,1]\\
 (u,v) &\to C(u,v)
 \end{align*} tal que:
 \begin{enumerate}
-\item $\forall \ u,v \in [0,1]$
+\item $\forall \ u,v \in [0,1]$, se tiene que
 \begin{itemize}
-\item $C (u,0) = C(0,v) = 0$
-\item $C(u,1) = u$
-\item $C(1, v) = v$
+\item $C (u,0) = C(0,v) = 0$,
+\item $C(u,1) = u$,
+\item $C(1, v) = v$.
 \end{itemize}
-\item $\forall \ u_1, u_2, v_1, v_2 \in [0,1]$ tales que $u_1 \leq u_2$ y $v_1 \leq v_2$  $$C (u_1,v_1)+C (u_2,v_2) - C(u_1,v_2) - C(u_2,v_1)\geq 0.$$
+\item $\forall \ u_1, u_2, v_1, v_2 \in [0,1]$ tales que $u_1 \leq u_2$ y $v_1 \leq v_2$, se tiene que  $$C (u_1,v_1)+C (u_2,v_2) - C(u_1,v_2) - C(u_2,v_1)\geq 0.$$
 \end{enumerate}
 
-Las cópulas se utilizan para modelar la estructura de dependencia entre las componentes de vectores aleatorios. Para poder entender esto, es necesario mencionar cómo se utilizan las cópulas para construir distribuciones conjuntas. El siguiente teorema es el resultado más importante de la teoría de cópulas \citep{copula_modeling}. Su importancia recae en que demuestra la relación que existe entre las cópulas y las funciones de distribución. El enunciado es como sigue.
+Las cópulas se utilizan para modelar la estructura de dependencia entre las componentes de vectores aleatorios. Para poder entender esto, es necesario mencionar cómo se utilizan las cópulas para construir distribuciones conjuntas. El siguiente teorema es, según \citet{copula_modeling}, el resultado más importante de la teoría de cópulas. Su importancia recae en que demuestra la relación que existe entre las cópulas y las funciones de distribución.
 
 \begin{theorem}[Teorema de Sklar]
 \label{sklar}
@@ -411,7 +398,7 @@ De la misma manera, si $C$ es una cópula y $F_X$, $F_Y$ son funciones de distri
 
 La demostración de este teorema se puede encontrar en \citet{nelsen}. 
 
-Dos importantes conclusiones se derivan directamente del teorema de Sklar. Primero, si se tienen observaciones de un vector bivariado $(X, Y)$ con distribuciones marginales continuas, el Teorema de Sklar \eqref{sklar} dice que la cópula correspondiente a su distribución conjunta es única. Por lo tanto, es útil estimarla a partir de datos disponibles para poder modelar la estructura de dependencia entre $X$ y $Y$. Por otro lado, el teorema de Sklar es una herramienta para crear distribuciones conjuntas con la estructura de dependencia que más convenga a cierta aplicación. En específico, si se tienen distribuciones marginales $F_X$ y $F_Y$, junto con una estructura de dependencia modelada a través de una cópula $C$, entonces se puede crear una función de distribución conjunta que refleje esta estructura utilizando $F(x, y) = C (F_X(x), F_Y(y))$.
+Dos importantes conclusiones se derivan directamente del Teorema de Sklar. Primero, si se tienen observaciones de un vector bivariado $(X, Y)$ con distribuciones marginales continuas, el Teorema de Sklar dice que la cópula correspondiente a su distribución conjunta es única. Por lo tanto, es útil estimarla a partir de datos disponibles para poder modelar la estructura de dependencia entre $X$ y $Y$. Por otro lado, el teorema de Sklar es una herramienta para crear distribuciones conjuntas con la estructura de dependencia que más convenga a cierta aplicación. En específico, si se tienen distribuciones marginales $F_X$ y $F_Y$, junto con una estructura de dependencia modelada a través de una cópula $C$, entonces se puede crear una función de distribución conjunta que refleje esta estructura utilizando $F(x, y) = C (F_X(x), F_Y(y))$.
 
 Un caso singular de las estructuras de dependencia mencionadas es cuando las componentes de un vector aleatorio son independientes. La forma más común de estudiar relaciones entre las componentes es con el coeficiente de correlación de Pearson, el cual solamente cuantifica la dependencia lineal entre variables. Esto significa que si las componentes son independientes, entonces el coeficiente de correlación vale cero. Sin embargo, un coeficiente de correlación cero no implica independencia entre las componentes (ver figura \ref{fig:panel_corr}). En contraste con el coeficiente de correlación, la teoría de cópulas tiene una forma única de modelar independencia entre las componentes de un vector aleatorio. El teorema \ref{independencia} muestra cómo se modela esta independencia con una cópula específica.
 
@@ -448,9 +435,9 @@ Sean X y Y dos variables aleatorias con distribuciones marginales $F_X$ $F_Y$ y 
 \end{proposition}
 
 Antes de introducir medidas de concordancia alternativas a la correlación de Pearson, se muestra un ejemplo de la necesidad de medidas alternativas para ver relaciones no lineales. Este ejemplo es tomado de \citet{copula_modeling} y consiste en simular un vector aleatorio $X = (X_1, X_2)$ donde $X_1 \sim \mathcal{N}(0, 1)$ y $$X_2 = \begin{cases}
-X_1  \text{ con probabilidad } 0.5\\
--X_1 \text{ con probabilidad }  0.5
-\end{cases}.$$ El diagrama de dispersión se muestra en la figura \ref{fig:panel_corr}. Siguiendo el ejemplo de \citet{copula_modeling}, se presenta también un diagrama de dispersión para un vector bivariado con componentes normales estándar generadas de manera independiente. El código para generar las simulaciones se muestra en el cuadro \ref{cod:sim_ejemplo}.
+X_1  \text{ con probabilidad } 0.5,\\
+-X_1 \text{ con probabilidad }  0.5.
+\end{cases}$$ El diagrama de dispersión se muestra en la figura \ref{fig:panel_corr}. Se presenta también un diagrama de dispersión para un vector bivariado con componentes normales estándar generadas de manera independiente. El código para generar las simulaciones se muestra en el cuadro \ref{cod:sim_ejemplo}.
 
 \begin{figure}[H]
     \centering
@@ -495,6 +482,7 @@ Viendo la figura \ref{fig:panel_corr}, es claro que las componentes del vector $
 Un valor más grande de $\uptau_{XY}$ significa que es más probable que un par de observaciones del vector aleatorio $(X, Y)$ sea concordante, es decir, que valores `grandes' de $X$ vienen acompañados de valores `grandes' de $Y$ o valores `chicos' de $X$ vienen acompañados de valores `chicos' de $Y$. Ahora se enuncian algunas propiedades de la tau de Kendall.
 
 \begin{proposition}
+\label{prop:kendall}
 Sean $X$ y $Y$ dos variables aleatorias continuas con cópula $C$. Entonces
 $$\uptau_{XY} = 4\int_{0}^1\int_{0}^1C(u, v) \ dC(u, v) - 1.$$ 
 \end{proposition}
@@ -544,25 +532,25 @@ Con el resultado anterior, se pueden demostrar las siguientes propiedades de $\u
 \rho_{XY} = \frac{cov(U, V)}{\sqrt{var(U)}\sqrt{var(V)}}.
 \end{equation}
 
-La definición \eqref{rho} es el coeficiente de correlación de Pearson entre $F_X(X)$ y $F_Y(Y)$. Si además $X$ y $Y$ tienen cópula $C$, entonces las siguientes definiciones son equivalentes a \eqref{rho} \citep{nelsen}:
+La definición \eqref{rho} es el coeficiente de correlación de Pearson entre $F_X(X)$ y $F_Y(Y)$. Si además $X$ y $Y$ tienen cópula $C$, entonces las siguientes definiciones son equivalentes a \eqref{rho}:
 
 \begin{align}
-\rho_{XY} &= 12\int_0^1 \int_0^1 C(u, v) \ dudv-3\\
-\rho_{XY} &= 12\int_0^1 \int_0^1 uv \ dC(u,v)-3\\
+\rho_{XY} &= 12\int_0^1 \int_0^1 C(u, v) \ dudv-3,\nonumber \\
+\rho_{XY} &= 12\int_0^1 \int_0^1 uv \ dC(u,v)-3, \nonumber \\
 \rho_{XY} &= 12\int_0^1\int_0^1 \left[ C(u, v) - uv \right] dudv \label{volumen}.
 \end{align}
 
-En \citet{nelsen} se menciona una interesante interpretación de \eqref{volumen}. Se puede ver a $\rho_{XY}$ como una `distancia promedio' entre la distribución de $X$ y $Y$, representada por la cópula $C$, y la independencia representada por la cópula $\Pi$.
+Utilizando la ecuación \eqref{volumen}, se puede ver a $\rho_{XY}$ como una `distancia promedio' entre la distribución de $X$ y $Y$, representada por la cópula $C$, y la independencia representada por la cópula $\Pi$.
 
 Al igual que $\uptau_{XY}$, $\rho_{XY}$ cumple las siguientes propiedades:
 
 \begin{enumerate}
-\item Si $X$ y $Y$ son independientes, $\rho_{XY} = 0$.
-\item $Y = \alpha X$, $\alpha > 0 \implies \rho_{XY} = 1$.
+\item Si $X$ y $Y$ son independientes, $\rho_{XY} = 0$,
+\item $Y = \alpha X$, $\alpha > 0 \implies \rho_{XY} = 1$,
 \item $Y = \beta X$, $\beta < 0 \implies \rho_{XY} = -1$.
 \end{enumerate}
 
-Si el lector quiere consultar más sobre \textit{métricas de concordancia} con estas propiedades, diríjase a \citet{nelsen}.
+Para consultar más sobre \textit{métricas de concordancia} con estas propiedades, ver a \citet{nelsen}.
 
 En este trabajo solamente se introducen las dos medidas de concordancia ya mencionadas. La tau de Kendall y la rho de Spearman son útiles ya que ambas se pueden representar por medio de cópulas, sin utilizar la función de distribución conjunta y sin especificar las funciones de distribución marginales.
 
@@ -572,26 +560,26 @@ En este trabajo solamente se introducen las dos medidas de concordancia ya menci
 
 La estadística bayesiana es una teoría que busca describir cómo deben actuar los individuos en situaciones de incertidumbre para evitar inconsistencias en su comportamiento. Busca establecer métodos para cuantificar incertidumbre y modificarla en presencia de nueva información, así como reglas para la toma de decisiones \citep{bernardo}.  En esta sección se introduce esta teoría axiomática de la inferencia estadística, se presenta brevemente el contexto histórico en el que se desarrolló y un ejemplo de estimación puntual.
 
-Los origenes de la estadística bayesiana se remontan hasta 1748, cuando el filósofo escocés David Hume publica el libro \textit{Investigación sobre el conocimiento humano}. En éste, Hume establece que solamente se puede estar seguro de lo que es aprendido por medio de la experiencia. Específicamente cuestiona cómo se entienden las relaciones causa-efecto:
+Los orígenes de la estadística bayesiana se remontan hasta 1748, cuando el filósofo escocés David Hume publica el libro \textit{Investigación sobre el conocimiento humano} \citep{hume}. En éste, Hume establece que solamente se puede estar seguro de lo que es aprendido por medio de la experiencia. Específicamente cuestiona cómo se entienden las relaciones causa-efecto:
 
 \begin{quotation}
-Al estar determinados por costumbre a trasladar el pasado al futuro en todas nuestras inferencias, cuando el pasado ha sido absolutamente regular y uniforme, esperamos el acontecimiento con la máxima seguridad y no dejamos lugar alguno para la suposición contraria. Pero cuando se ha encontrado que efectos distintos siguen de causas que, \textbf{al parecer}, son exactamente iguales, todos estos efectos distintos han de presentarse a la mente al trasladar el pasado al futuro, y deben entrar en nuestra consideración cuando determinamos la probabilidad del acontecimiento \citep{hume}.
+\noindent Al estar determinados por costumbre a trasladar el pasado al futuro en todas nuestras inferencias, cuando el pasado ha sido absolutamente regular y uniforme, esperamos el acontecimiento con la máxima seguridad y no dejamos lugar alguno para la suposición contraria. Pero cuando se ha encontrado que efectos distintos siguen de causas que, al parecer, son exactamente iguales, todos estos efectos distintos han de presentarse a la mente al trasladar el pasado al futuro, y deben entrar en nuestra consideración cuando determinamos la probabilidad del acontecimiento.
 \end{quotation}
 
 El escepticismo de David Hume sobre las relaciones causa-efecto fue tratado matemáticamente por Thomas Bayes, quien buscó la manera de describir las probabilidades de las causas a partir de sus efectos observables. Su objetivo fue aproximar la probabilidad de un evento futuro del cual no conocía nada más que su pasado, es decir, regresar de observaciones en el mundo real a sus causas probables. A este problema se le ha conocido como el problema de probabilidad inversa o probabilidad de las causas  (Mcgrayne, 2011).
 
-A pesar de que los orígenes de la estadística bayesiana los encontramos en la Inglaterra de finales del siglo XVIII, el mayor exponente de esta teoría fue el matemático francés Pierre-Simon Laplace. En presencia de grandes cantidades de datos astronómicos obtenidos a lo largo de los años, Laplace se preguntó sobre las posibles causas de las divergencias y errores en las observaciones. A Laplace se le atribuye la versión moderna del célebre Teorema de Bayes. En su forma más simple, este teorema es
+A pesar de que los orígenes de la estadística bayesiana los encontramos en la Inglaterra de finales del siglo XVIII, el mayor exponente de esta teoría fue el matemático francés Pierre-Simon Laplace. En presencia de grandes cantidades de datos astronómicos obtenidos a lo largo de los años, Laplace se preguntó sobre las posibles causas de las divergencias y errores en las observaciones. A Laplace se le atribuye la versión moderna del célebre Teorema de Bayes. En su forma más simple, este teorema establece que:
 \begin{equation}
 \label{bayes}
 P(C|D) = \frac{P(C)P(D|C)}{P(D)},
 \end{equation}
-donde, utilizando la terminología del siglo XVIII, $P(C)$ es una creencia sobre la causa $C$ descrita de manera probabilística antes de observar los datos $D$, $P(D|C)$ es la probabilidad de observar los datos bajo la causa $C$ y el lado izquierdo $P(C|D)$ es una descripción probabilística de la creencia en la causa $C$ tras observar los datos $D$ \citep{bernardo}.
+donde, utilizando la terminología del siglo XVIII, $P(C)$ es una creencia sobre la causa $C$ descrita de manera probabilística antes de observar los datos $D$, $P(D|C)$ es la probabilidad de observar los datos bajo la causa $C$ y el lado izquierdo $P(C|D)$ es una descripción probabilística de la creencia en la causa $C$ tras observar los datos $D$.
 
 Es importante notar que se habla de ``creencias'' en las causas. Esto se debe a que en la estadística bayesiana se tiene un concepto de probabilidad distinto a aquél del enfoque frecuentista. En \citet{feller} se habla de la \textit{probabilidad estadística} (frecuentista) como ``un concepto que se refiere a resultados posibles de un experimento conceptual'', esto significa que la probabilidad está únicamente relacionada con la variabilidad observada en realizaciones de un mismo experimento. En contraste, la probabilidad en el sentido bayesiano es una cuantificación de la incertidumbre, sin importar si ésta es producto de la misma variabilidad o de la falta de información (ignorancia) del individuo en cuestión. Por ello se dice que la probabilidad en el sentido bayesiano es una \textbf{probabilidad subjetiva}.
 
 Al principio de esta sección se mencionó que la estadística bayesiana busca describir cómo los individuos deben tomar decisiones en situaciones de incertidumbre. Para entender esta idea, se explica ahora qué es un problema de decisión con incertidumbre y se plantea un problema de inferencia estadística como un problema de decisión con incertidumbre.
 
-\citet{mendoza} definen un problema de decisión como la situación en la que un tomador de decisiones se enfrenta a un conjunto de decisiones, 	de las cuales debe elegir una y solamente una de ellas. Una decisión es juzgada por sus consecuencias y será mejor mientras más satisfacción le produzca al individuo. Además, se dice que un problema de decisión es con incertidumbre cuando para al menos una decisión existen múltiples consecuencias posibles. Un problema de decisión está caracterizado por cuatro elementos \citep{mendoza}:
+\citet{mendoza} definen un problema de decisión como la situación en la que un tomador de decisiones se enfrenta a un conjunto de decisiones, 	de las cuales debe elegir una y solamente una de ellas. Una decisión es juzgada por sus consecuencias y será mejor mientras más satisfacción le produzca al individuo. Además, se dice que un problema de decisión es con incertidumbre cuando para al menos una decisión existen múltiples consecuencias posibles. Un problema de decisión está caracterizado por cuatro elementos:
 \begin{itemize}
 \item Un conjunto de decisiones $\mathcal{D} = \lbrace d_1, d_2, \dots, d_k\rbrace$.
 \item El conjunto de eventos inciertos relevantes. Para cada $d_i \in \mathcal{D}$ se tiene $E_i$, una partición del evento seguro $\Omega$ y se define el conjunto de eventos inciertos relevantes como $\mathcal{E} = \cup_{i=1}^k E_i$.
@@ -599,9 +587,9 @@ Al principio de esta sección se mencionó que la estadística bayesiana busca d
 \item Una relación de preferencia $\succ$ definida sobre los elementos de $\mathcal{D}$.
 \end{itemize}
 
-Ya definidos los elementos de un problema de decisión se pueden establecer los axiomas de coherencia, los cuales son la base para esta teoría axiomática de inferencia estadística. Es importante recalcar, como mencionan \citet{bernardo}, que estos axiomas no buscan describir la manera en que los individuos toman decisiones en la realidad, si no que son una serie de principios que un tomador de decisiones debería seguir para evitar inconsistencias en su comportamiento. En el apéndice \ref{ap:bayes} se incluye la versión de los axiomas presentada por \citet{mendoza}, la cual es una versión simplificada de los axiomas presentados en \citet{bernardo}. Una vez establecidos los axiomas, \citet{mendoza} definen la probabilidad subjetiva de un evento relevante $E \in \mathcal{E}$ bajo las condiciones $H$, denotada $P(E|H)$, demuestran que esta probabilidad subjetiva existe y es única para todo evento relevante $E \in \mathcal{E}$ y también demuestran que cumple con los axiomas de Kolmogorov como consecuencia de los axiomas de coherencia (ver apéndice \ref{ap:bayes}).
+Ya definidos los elementos de un problema de decisión se pueden establecer los axiomas de coherencia, los cuales son la base para esta teoría axiomática de inferencia estadística. Es importante recalcar, como mencionan \citet{bernardo}, que estos axiomas no buscan describir la manera en que los individuos toman decisiones en la realidad, si no que son una serie de principios que un tomador de decisiones debería seguir para evitar inconsistencias en su comportamiento. En el apéndice \ref{ap:bayes} se incluye la versión de los axiomas presentada por \citet{mendoza}, la cual es una versión simplificada de los axiomas presentados en \citet{bernardo}. Una vez establecidos los axiomas, se define la probabilidad subjetiva de un evento relevante $E \in \mathcal{E}$ bajo las condiciones $H$, denotada $P(E|H)$, demuestran que esta probabilidad subjetiva existe y es única para todo evento relevante $E \in \mathcal{E}$ y también demuestran que cumple con los axiomas de Kolmogorov como consecuencia de los axiomas de coherencia (ver apéndice \ref{ap:bayes}).
 
-Como último elemento de la teoría de decisión, se introduce el concepto de funciones de utilidad. Una función de utilidad es una función $u: C \to \mathbb{R}$ tal que $\forall c_1, c_2 \in C$, $c_1 \succ c_2 \iff u(c_1) > u(c_2)$. Una vez que se asignan utilidades al conjunto de consecuencias y probabilidades subjetivas a los eventos relevantes, se puede proceder a resolver el problema de decisión con el mecanismo óptimo derivado de los axiomas de coherencia. Este mecanismo se conoce como el criterio de la utilidad esperada y establece que para cualquier par de decisiones $d_1, d_2 \in \mathcal{D}$, $$ \ d_1 \succ d_2 \iff E_H[u(d_1)] > E_H[u(d_2)],$$ donde $E_H$ es el valor esperado bajo las condiciones $H$ y $u(d)$ se refiere a las utilidades asociadas a las consecuencias posibles de la decisión $d$. Como este criterio es el derivado de los axiomas de coherencia, cualquier otro procedimiento utilizado para solucionar un problema de decisión debe ser equivalente al establecido por los axiomas o se contrapone con éstos \citep{mendoza}.
+Como último elemento de la teoría de decisión, se introduce el concepto de funciones de utilidad. Una función de utilidad es una función $u: C \to \mathbb{R}$ tal que $\forall c_1, c_2 \in C$, $c_1 \succ c_2 \iff u(c_1) > u(c_2)$. Una vez que se asignan utilidades al conjunto de consecuencias y probabilidades subjetivas a los eventos relevantes, se puede proceder a resolver el problema de decisión con el mecanismo óptimo derivado de los axiomas de coherencia. Este mecanismo se conoce como el criterio de la utilidad esperada y establece que para cualquier par de decisiones $d_1, d_2 \in \mathcal{D}$, $$ \ d_1 \succ d_2 \iff E_H[u(d_1)] > E_H[u(d_2)],$$ donde $E_H$ es el valor esperado bajo las condiciones $H$ y $u(d)$ se refiere a las utilidades asociadas a las consecuencias posibles de la decisión $d$. Como este criterio es el derivado de los axiomas de coherencia, cualquier otro procedimiento utilizado para solucionar un problema de decisión debe ser equivalente al establecido por los axiomas o se contrapone con éstos.
 
 Ahora se presenta un ejemplo para entender cómo plantear el problema inferencial de estimación puntual como un problema de decisión con incertidumbre y resolverlo con el criterio derivado de los axiomas de coherencia. También se muestra cómo actualizar el conocimiento \textit{a priori} sobre el conjunto de eventos inciertos relevantes $\mathcal{E}$ en presencia de nueva información. Este ejemplo se encuentra en \citet{mendoza}.
 
@@ -620,15 +608,15 @@ Derivando respecto a $\hat{\mu}$ e igualando a cero se obtiene
 \end{align*}
 por lo que el estimador óptimo \textit{a priori} está dado por $\hat{\mu}^* = E_{\mu}[\mu] = m$.
 
-Ahora supóngase que se observa una muestra aleatoria $X_{(n)} = x_{(n)}$ de $X$. Se utiliza el teorema de Bayes \eqref{bayes} para actualizar la distribución a priori de $\mu$:
+Ahora supóngase que se observa una muestra aleatoria $\underline{x}_{(n)}$ de $X$. Se utiliza el teorema de Bayes \eqref{bayes} para actualizar la distribución a priori de $\mu$:
 \begin{align*}
-P(\mu | X_{(n)}) &= \frac{\pi (\mu) P(X_{(n)}|\mu)}{P(X_{(n)})}\\
-&\propto \pi (\mu) P(X_{(n)}|\mu)\\
+P(\mu | \underline{x}_{(n)}) &= \frac{\pi (\mu) P(\underline{x}_{(n)}|\mu)}{P(\underline{x}_{(n)})}\\
+&\propto \pi (\mu) P(\underline{x}_{(n)}|\mu)\\
 &\propto \exp\left( -\frac{1}{2} \left( \sum_{i=1}^n \frac{(x_i - \mu)^2}{\sigma^2} + \frac{(m - \mu)^2}{s^2}\right) \right),
 \end{align*}
-de donde se puede mostrar (ver  \citet{mendoza} o \citet{gelman}) que $\mu | X_{(n)} \sim \mathcal{N}(m_x, s_x^2)$ con $$m_x = \frac{(n / \sigma^2) \bar{x} + (m/s^2)}{n/\sigma^2 + 1/s^2}$$ y $$s_x^2 = \left( \frac{n}{\sigma^2} + s^{-2}\right)^{-1}.$$ Por lo tanto, siguiendo el desarrollo del caso a priori, el estimador óptimo \textit{a posteriori} de $\mu$ es $\hat{\mu}^* = E_{\mu | x_{(n)}}[\mu] = m_x$.
+de donde se puede mostrar (ver  \citet{mendoza} o \citet{gelman}) que $\mu | \underline{x}_{(n)} \sim \mathcal{N}(m_x, s_x^2)$ con $$m_x = \frac{(n / \sigma^2) \bar{x} + (m/s^2)}{n/\sigma^2 + 1/s^2}$$ y $$s_x^2 = \left( \frac{n}{\sigma^2} + s^{-2}\right)^{-1}.$$ Por lo tanto, siguiendo el desarrollo del caso a priori, el estimador óptimo \textit{a posteriori} de $\mu$ es $\hat{\mu}^* = E_{\mu | \underline{x}_{(n)}}[\mu] = m_x$.
 
-Se muestra ahora un ejemplo con valores concretos realizado en R.  El código se presenta en el cuadro \ref{cod:mu_posterior}. La figura \ref{fig:pointwise} muestra las gráficas de la distribución inicial y la posterior, junto con la verosimilitud $P(X_{(n)}|\mu)$ para los valores $\mu = 3$, $\sigma = 0.1$, $m = 2$, $s = 0.1$ y una muestra de tamaño $n = 3$. Se puede apreciar cómo la muestra observada ``corrige'' la estimación a priori de $\mu$, acércandola más al valor real.
+Se muestra ahora un ejemplo con valores concretos realizado en R.  El código se presenta en el cuadro \ref{cod:mu_posterior}. La figura \ref{fig:pointwise} muestra las gráficas de la distribución inicial y la posterior, junto con la verosimilitud $P(\underline{x}_{(n)}|\mu)$ para los valores $\mu = 3$, $\sigma = 0.1$, $m = 2$, $s = 0.1$ y una muestra de tamaño $n = 3$. Se puede apreciar cómo la muestra observada ``corrige'' la estimación a priori de $\mu$, acércandola más al valor real.
 
 \begin{table}[htb]
 \begin{lstlisting}
@@ -662,7 +650,7 @@ Quien desee leer más sobre las bases teóricas de la estadística bayesiana se 
 \section{Métodos de simulación}
 \label{simulacion}
 
-La posibilidad de simular observaciones de variables aleatorias ha sido fundamental en el desarrollo de la estadística aplicada, ya que permite hacer estimaciones empíricas de cálculos que son muy complicados o incluso imposibles de resolver analíticamente. La simulación de variables aleatorias depende a su vez de poder simular observaciones de una distribución uniforme en $(0, 1)$. Estos generadores de números uniformes no son objeto de este trabajo, pero se puede leer sobre ellos en \citet{dagpunar}. Este capítulo habla de cómo simular observaciones directamente con el método de la transformación inversa e indirectamente con métodos de aceptación y rechazo. Además se habla de técnicas de Monte Carlo para aproximar momentos de variables aleatorias y el uso de procesos estocásticos para simular virtualmente cualquier distribución con técnicas de Monte Carlo vía cadenas de Markov.
+La posibilidad de simular observaciones de variables aleatorias ha sido fundamental en el desarrollo de la estadística aplicada, ya que permite hacer estimaciones empíricas de cálculos que son muy complicados o incluso imposibles de resolver analíticamente. La simulación de variables aleatorias depende a su vez de poder simular observaciones de una distribución uniforme en $(0, 1)$ (ver \citet{dagpunar}). Este capítulo habla de cómo simular observaciones directamente con el método de la transformación inversa e indirectamente con métodos de aceptación y rechazo. Además se habla de técnicas de Monte Carlo para aproximar momentos de variables aleatorias y el uso de procesos estocásticos para simular virtualmente cualquier distribución con técnicas de Monte Carlo vía cadenas de Markov.
 
 \subsection{Método de la transformada inversa}
 \label{sec:transformada}
@@ -713,7 +701,7 @@ Utilizando el teorema \ref{teo:trans}, se puede crear un algoritmo para simular 
 \item Evaluar $X=F^{-1}(U)$.
 \end{enumerate}
 
-Para ilustrar el algoritmo se utiliza como ejemplo la distribución exponencial. $X\sim Exp(\lambda)$ tiene función de densidad dada por $$f(x) = \lambda e^{-\lambda x} \mathbb{I}_{(0,\infty)}(x)$$ y función de distribución dada por $$F(x) = 1-e^{-\lambda x}\mathbb{I}_{[0,\infty)}(x)$$. Esta función de distribución es continua y estrictamente creciente en $\Omega_X=[0, \infty)$, por lo que su inversa generalizada corresponde a la inversa en el sentido usual. La inversa de $F$ es $$F^{-1}(y) = -\frac{1}{\lambda}\log (1-y)$$ con $Dom(F^{-1}) = [0, 1)$. En el cuadro \ref{cod:transformada_inversa} se muestra el código en R para la simulación de $X \sim Exp(\lambda = 1/2)$, junto con el histograma obtenido y la función de densidad en la figura \ref{fig:transformada_inversa}.
+Para ilustrar el algoritmo se utiliza como ejemplo la distribución exponencial. $X\sim Exp(\lambda)$ tiene función de densidad dada por $$f(x) = \lambda e^{-\lambda x} \mathbb{I}_{(0,\infty)}(x)$$ y función de distribución dada por $$F(x) = 1-e^{-\lambda x}\mathbb{I}_{[0,\infty)}(x).$$ Esta función de distribución es continua y estrictamente creciente en $\Omega_X=[0, \infty)$, por lo que su inversa generalizada corresponde a la inversa en el sentido usual. La inversa de $F$ es $$F^{-1}(y) = -\frac{1}{\lambda}\log (1-y)$$ con $Dom(F^{-1}) = [0, 1)$. En el cuadro \ref{cod:transformada_inversa} se muestra el código en R para la simulación de $X \sim Exp(\lambda = 1/2)$, junto con el histograma obtenido y la función de densidad en la figura \ref{fig:transformada_inversa}.
 
 \begin{table}[htb]
 \begin{lstlisting}
@@ -904,15 +892,7 @@ Los algoritmos presentados en las secciones \ref{sec:transformada} y \ref{acepta
 \epigraph{\itshape The combination of Bayes and MCMC has been called ``arguably the most powerful mechanism ever created for processing data and knowledge".}{---Sharon B. McGrayne, \textit{The Theory That Would Not Die.}}
 \subsubsection*{Integración Monte Carlo}
 
-Se conoce como integrácion Monte Carlo a un conjunto de técnicas utilizadas para aproximar integrales. La principal característica de estas técnicas es que se basan en algoritmos de simulación para realizar las aproximaciones a través de muestras aleatorias \citep{casella}. Su funcionamiento es consecuencia de uno de los resultados más famosos de la teoría de probabilidad, la \textit{ley fuerte de los grandes números} que se presenta a continuación.
-
-\begin{theorem}[Ley fuerte de los grandes números]
-\label{grandes_numeros}
-Sea $\lbrace X_i \rbrace$ una sucesión de variables aleatorias independientes e idénticamente distribuidas con valor esperado $E[X_i]=\mu < \infty$. Entonces,
-$$P\left( \lim_{n \to \infty} \frac{\sum_{i=1}^{n} X_i}{n} = \mu \right) = 1.$$
-\end{theorem}
-
-Este enunciado es suficiente para los propósitos de esta sección. Sin embargo, sepa el lector que una definición más general de sucesiones que cumplen con la ley fuerte de los grandes números, al igual que la demostración de este teorema, se pueden consultar en \citet{feller}.
+Se conoce como integrácion Monte Carlo a un conjunto de técnicas utilizadas para aproximar integrales. La principal característica de estas técnicas es que se basan en algoritmos de simulación para realizar las aproximaciones a través de muestras aleatorias \citep{casella}. Su funcionamiento es consecuencia de uno de los resultados más famosos de la teoría de probabilidad, la \textit{ley fuerte de los grandes números} (ver \citet{feller}).
 
 Las técnicas de integración Monte Carlo buscan aproximar integrales de la forma
 $$\theta = E[h(x)] = \int_{\Omega_X} h(x) \ dF(x),$$ donde $F$ es la función de distribución de una variable aleatoria $X$ y $\Omega_X$ su soporte. Como consecuencia del teorema \ref{grandes_numeros}, para estimar $\theta$ se simula una muestra aleatoria $X_1, X_2, \dots, X_n$ con $X_i\sim F$ y se utiliza el estimador $$\hat{\theta} = \frac{1}{n}\sum_{i=1}^n h(x_i).$$ Esto significa que se pueden explotar las técnicas de las secciones \ref{sec:transformada} y \ref{aceptacion} para realizar estas estimaciones.
@@ -967,21 +947,21 @@ En la figura \ref{fig:sim_hx} se muestran las simulaciones, en morado los puntos
 \label{fig:sim_hx}
 \end{figure}
 
-La importancia de las técnicas de integración Monte Carlo en el contexto de inferencia estadística recae en que, si se tiene una distribución continua, muchas propiedades de esta distribución se pueden expresar como integrales. Esto es principalmente importante en inferencia bayesiana ya que muchas veces no interesa obtener la expresión explícita de las distribuciones posteriores, si no que únicamente se busca su valor esperado.
+La importancia de las técnicas de integración Monte Carlo en el contexto de inferencia estadística recae en que, si se tiene una distribución continua, muchas propiedades de esta distribución se pueden expresar como integrales. Esto es principalmente importante en inferencia bayesiana ya que muchas veces no interesa obtener la expresión explícita de las distribuciones posteriores, si no que únicamente se busca su valor esperado, varianza y otras cantidades de interés.
 
-Si se tiene una distribución posterior para $\theta$ de la forma $\theta \sim F(\theta | X_{(n)})$, donde $X_{(n)} = x_{(n)}$ es una muestra observada de datos, entonces el valor esperado de $\theta| x_{(n)}$ es
+Si se tiene una distribución posterior para $\theta$ de la forma $\theta \sim F(\theta | \underline{x}_{(n)})$, donde $\underline{x}_{(n)}$ es una muestra observada de datos, entonces el valor esperado de $\theta| \underline{x}_{(n)}$ es
 \begin{equation}
 \label{eq:exp_theta}
-E[\theta | x_{(n)}] = \int_{\Theta} \theta \ dF(\theta | x_{(n)}).
+E[\theta | \underline{x}_{(n)}] = \int_{\Theta} \theta \ dF(\theta | \underline{x}_{(n)}).
 \end{equation}
-Para calcular esta expresión de manera analítica se necesita la densidad posterior $$f(\theta | x_{(n)}) = \frac{f(x_{(n)} | \theta)\pi (\theta)}{\int_{\Theta} f(x_{(n)} | \theta)\pi (\theta) \ d\theta}.$$ Si el espacio $\Theta$ es de dimensión uno, la integral en el denominador y la integral \eqref{eq:exp_theta} se pueden aproximar con métodos de cuadratura como la regla de Simpson o el método del trapecio (ver \citet{burden}). Sin embargo, a medida que crece la dimensión del espacio parametral, crece también la complejidad de la aproximación con los métodos de cuadratura hasta volverse prácticamente imposible. Es ahí cuando entran las técnicas de integración Monte Carlo. Se pueden obtener muestras de la distribución posterior de $\theta$ y aproximar el valor esperado con la media muestral.
+Para calcular esta expresión de manera analítica se necesita la densidad posterior $$f(\theta | \underline{x}_{(n)}) = \frac{f(\underline{x}_{(n)} | \theta)\pi (\theta)}{\int_{\Theta} f(\underline{x}_{(n)} | \theta)\pi (\theta) \ d\theta}.$$ Si el espacio $\Theta$ es de dimensión uno, la integral en el denominador y la integral \eqref{eq:exp_theta} se pueden aproximar con métodos de cuadratura como la regla de Simpson o el método del trapecio (ver \citet{burden}). Sin embargo, a medida que crece la dimensión del espacio parametral, crece también la complejidad de la aproximación con los métodos de cuadratura hasta volverse prácticamente imposible. Es ahí cuando entran las técnicas de integración Monte Carlo. Se pueden obtener muestras de la distribución posterior de $\theta$ y aproximar el valor esperado con la media muestral.
 
-Cuando la distribución posterior tiene una forma conocida que se puede simular con los métodos de las secciones \ref{sec:transformada} y \ref{aceptacion}, entonces la aproximación del valor esperado es directa. Ahora se habla de qué hacer cuando la distribución posterior no se puede simular con los métodos vistos hasta ahora. La idea de los métodos de Monte Carlo vía cadenas de Markov es simular cadenas de Markov cuya distribución estacionaria sea la distribución de interés y utilizar estas simulaciones para la aproximación de la esperanza. Primero se presenta algo de teoría sobre cadenas de Markov.
+Cuando la distribución posterior tiene una forma conocida que se puede simular con los métodos de las secciones \ref{sec:transformada} y \ref{aceptacion}, entonces la aproximación del valor esperado es directa. Sin embargo, en muchas ocasiones no es posible obtener simulaciones de la distribución posterior únicamente con los algoritmos mencionados anteriormente y es necesario recurrir a los métodos de Monte Carlo vía cadenas de Markov. La idea de los métodos de MCMC es simular cadenas de Markov cuya distribución estacionaria sea la distribución de interés y utilizar estas simulaciones para la aproximación de la esperanza. Primero se presenta algo de teoría sobre cadenas de Markov. En el capítulo \ref{elmodelo} se combinan los algoritmos presentados hasta ahora con métodos de MCMC para simular observaciones de una distribución posterior multivariada.
 
 \newpage
 
 \subsubsection*{Cadenas de Markov}
-Esta sección contiene la teoría mínima indispensable de cadenas de Markov para entender los algoritmos de Monte Carlo vía cadenas de Markov (abreviado MCMC). Por facilidad se introduce esta teoría para procesos estocásticos en tiempo discreto y con espacio de estados discreto. Para procesos en tiempo continuo y/o espacio de estados continuo, se recomienda consultar \citet{ross}.
+Esta sección contiene la teoría mínima indispensable de cadenas de Markov para entender los algoritmos de Monte Carlo vía cadenas de Markov. Por facilidad se introduce esta teoría para procesos estocásticos en tiempo discreto y con espacio de estados discreto. Para procesos en tiempo continuo y/o espacio de estados continuo, se recomienda consultar \citet{ross}.
 
 \textbf{Definición.} Sea $\lbrace X_t, t \in \mathbb{N} \cup \lbrace 0 \rbrace \rbrace$ un proceso estocástico con espacio de estados discreto. Se dice que este proceso es una cadena de Markov si 
 \begin{align*}
@@ -1035,13 +1015,13 @@ Si se quieren obtener muestras de una densidad $f$, difíciles o imposibles de o
 En esta sección se presentaron las ideas únicamente con cadenas de Markov con espacio de estados discreto. Sin embargo algunas propiedades como la irreducibilidad, aperiodicidad, la recurrencia y la existencia de una distribución estacionaria se pueden trasladar a cadenas con espacio de estados continuo, que son las que se utilizan más adelante. En el caso continuo, en vez de contar con una matriz de transición, se tiene un \textit{kernel} de transición. El kernel de transición, denotado $P(x, \mathcal{A})$, es una función de distribución condicional que representa la probabilidad de moverse de $x$ a un punto en el conjunto $\mathcal{A}$ \citep{chib_mh}.
 
 \subsubsection*{Muestreador de Gibbs}
-En los siguientes dos apartados se introducen dos de los algoritmos más importantes de Monte Carlo vía cadenas de Markov, el muestreador de Gibbs y el algoritmo de Metropolis-Hastings. Aunque el muestreador de Gibbs es un caso especial del algoritmo de Metropolis-Hastings, se habla antes del primero porque el algoritmo de Metropolis-Hastings había vivido en las tinieblas hasta la aparición del muestreador de Gibbs. Se introduce primero un poco de contexto histórico. Para un relato más detallado de este contexto se recomienda leer \citet{bertsch}.
+En los siguientes dos apartados se introducen dos de los algoritmos más importantes de Monte Carlo vía cadenas de Markov, el muestreador de Gibbs y el algoritmo de Metropolis-Hastings. Aunque el muestreador de Gibbs es un caso especial del algoritmo de Metropolis-Hastings, se habla antes del primero porque el algoritmo de Metropolis-Hastings no había sido popular en la comunidad estadística hasta la aparición del muestreador de Gibbs. Se introduce primero un poco de contexto histórico. Para un relato más detallado de este contexto se recomienda leer \citet{bertsch}.
 
 Para 1980, las bases teóricas de la inferencia bayesiana estaban bien establecidas y desarrolladas por estadísticos como Leonard Jimmie Savage, Bruno de Finetti y Dennis Lindley. Sin embargo, el uso de estas técnicas estaba limitado por la dificultad de realizar todos los cálculos a mano. Las primeras computadoras hacían que la información fuera más accesible, pero esto a su vez hizo que creciera la dimensión de los espacios parametrales de interés, por lo que resultaba prácticamente imposible estudiar distribuciones a priori, verosimilitudes y distribuciones posteriores en estos espacios.
 
-El muestreador de Gibbs \textit{(Gibbs sampler)} fue introducido por los hermanos Stuart y Donald Geman como una herramienta para el reconocimiento de imágenes en 1984. A pesar de esto, tampoco fue muy utilizado en la práctica ya que el gran número de pixeles en una imagen era inmanejable para las computadoras de la época. Algún tiempo después se supo que el matemático ruso Valentin Fedorovich Turchin había descubierto el muestreador de Gibbs en 1971 pero su artículo solamente apareció en publicaciones rusas y no tuvo gran difusión \citep{bertsch}.
+El muestreador de Gibbs \textit{(Gibbs sampler)} fue introducido por los hermanos Stuart y Donald Geman como una herramienta para el reconocimiento de imágenes en 1984. A pesar de esto, tampoco fue muy utilizado en la práctica ya que el gran número de pixeles en una imagen era inmanejable para las computadoras de la época. Algún tiempo después se supo que el matemático ruso Valentin Fedorovich Turchin había descubierto el muestreador de Gibbs en 1971 pero su artículo solamente apareció en publicaciones rusas y no tuvo gran difusión.
 
-La aparición del muestreador de Gibbs como un método de simulación se debe a Alan Gelfand y Adrian F. M. Smith. En su artículo \textit{Sampling-Based Approaches to Calculating Marginal Densities}, publicado en 1990, los autores explican el uso del algoritmo de los hermanos Geman para obtener muestras de distribuciones marginales a partir de distribuciones condicionales. Alan Gelfand explicó que el muestreador de Gibbs toma el problema de simular observaciones de una distribución de gran dimensión y lo divide en pequeños pedazos que son fáciles de resolver \citep{bertsch}. Estos pedazos son obtener muestras de distribuciones condicionales. A continuación se explica cómo hacer esta división.
+El muestreador de Gibbs como un método de simulación se introdujo en \citet{gelfand_smith}, donde se utiliza el algoritmo de los hermanos Geman para obtener muestras de distribuciones marginales a partir de distribuciones condicionales. Alan Gelfand explicó que el muestreador de Gibbs toma el problema de simular observaciones de una distribución de gran dimensión y lo divide en pequeños pedazos que son fáciles de resolver. Estos pedazos son obtener muestras de distribuciones condicionales. A continuación se explica cómo hacer esta división.
 
 Se toma primero un caso con dos variables aleatorias, $X$ y $Y$. La idea del muestreador de Gibbs es simular observaciones de la distribución conjunta $f_{X, Y}$ utilizando simulaciones de las distribuciones condicionales $f_{X|Y}$ y $f_{Y|X}$, suponiendo que estas condicionales son conocidas y fáciles de simular. El algoritmo en el caso bivariado es como sigue. Primero se fijan valores iniciales $x^{(0)}, y^{(0)}$. Luego, en la iteración $t$ el algoritmo es:
 \begin{enumerate}
@@ -1116,12 +1096,12 @@ La extensión del muestreador de Gibbs a mayores dimensiones se hace de la misma
 
 En \citet{geman} se muestran las condiciones bajo las cuales la distribución del proceso $\lbrace (\theta_1, \theta_2, \dots, \theta_p)_t\rbrace$ converge a la distribución conjunta $f_{\theta}$ \textbf{sin importar los valores iniciales} y por lo tanto, la distribución del proceso $\lbrace \theta_i^t \rbrace$ converge a la distribución marginal $f_{\theta_i}$ \citep{gelfand_smith}. Para estudiar las propiedades matemáticas de esta convergencia resulta más sencillo estudiar las propiedades del algoritmo de Metropolis-Hastings y entender el muestreador de Gibbs como un caso particular de éste. Es importante notar que si los subvectores en que se divide el vector $\theta$ son en realidad cada uno de sus elementos, entonces todas las simulaciones que se deben realizar en el algoritmo son de distribuciones univariadas, lo cual suele simplificar la programación.
 
-Una de las mayores facilidades del muestreador de Gibbs es que es común encontrar la especificación de distribuciones conjuntas a través de las condicionales cuando se trabaja con modelos jerárquicos. Esto es ejemplificado por diversos autores como \citet{casella}, \citet{gelman} y \citet{gelfand_smith}. Otra ventaja que señalan \citet{casella} es que el muestreador de Gibbs se puede utilizar para trabajar con modelos de variables latentes. Estos son modelos expresados de la forma $$f(x| \theta) = \int_\Xi f(x, \xi | \theta) \ d\xi,$$ donde $\xi$ es la variable latente (no observable) y $\Xi$ su soporte. En la sección \ref{elmodelo} se utilizan estos modelos para describir la correlación entre tiempos de fallo y para trabajar con observaciones no exactas.
+Una de las mayores facilidades del muestreador de Gibbs es que es común encontrar la especificación de distribuciones conjuntas a través de las condicionales cuando se trabaja con modelos jerárquicos. Esto es ejemplificado por diversos autores como \citet{casella}, \citet{gelman} y \citet{gelfand_smith}. Otra ventaja es que el muestreador de Gibbs se puede utilizar para trabajar con modelos de variables latentes. Estos son modelos expresados de la forma $$f(x| \theta) = \int_\Xi f(x, \xi | \theta) \ d\xi,$$ donde $\xi$ es la variable latente (no observable) y $\Xi$ su soporte. En la sección \ref{elmodelo} se utilizan estos modelos para describir la correlación entre tiempos de fallo y para trabajar con observaciones no exactas.
 
 Se presenta un ejemplo de un modelo jerárquico para ilustrar el muestreador de Gibbs con más de dos variables \citep{casella_gs}. La especificación del modelo es como sigue:
 \begin{itemize}
-\item $\omega|\theta, \gamma \sim Binomial(\gamma, \theta)$
-\item $\theta | \omega, \gamma \sim Be(\omega + \alpha, \gamma - \omega + \beta)$
+\item $\omega|\theta, \gamma \sim Binomial(\gamma, \theta)$,
+\item $\theta | \omega, \gamma \sim Be(\omega + \alpha, \gamma - \omega + \beta)$,
 \item $\gamma | \omega, \theta \propto e^{-\lambda(1-\theta)}\frac{[(1-\theta)\lambda]}{(\gamma - \omega)!}^{\gamma - \omega} \mathbb{I}_{\lbrace \omega, \omega + 1, \dots \rbrace}(\gamma),$
 \end{itemize}
 donde $\alpha$, $\beta$ y $\lambda$ son hiperparámetros constantes. La distribución condicional $\gamma | \omega, \theta$ es una Poisson con parámetro $\lambda(1-\theta)$ y el soporte desplazado a $\lbrace \omega, \omega + 1, \dots \rbrace$. Para obtener muestras de esta distribución se puede simular $\delta \sim Po(\lambda(1-\theta))$ y hacer $\gamma = \delta + \omega$. Primero, se establecen los valores iniciales $\omega^{(0)}$, $\theta^{(0)}$ y $\gamma^{(0)}$. En el cuadro \ref{cod:gs_hier} se incluye el código para realizar las simulaciones. Se utilizan los valores de los hiperparámetros $\alpha = 2$, $\beta = 4$ y $\lambda = 16$ y se realizan 10 mil iteraciones.
@@ -1220,7 +1200,7 @@ Este resultado es de suma importancia, ya que significa que se pueden utilizar l
 \subsubsection*{Algoritmo de Metropolis-Hastings}
 \label{sec:mh}
 
-Antes de que Gelfand y Smith introdujeran el muestreador de Gibbs a la comunidad estadística, químicos y físicos ya estaban utilizando métodos de Monte Carlo en experimentos. En 1953, Nicholas Metropolis publicó un artículo en el que introdujo su algoritmo. Este artículo solamente trataba sobre el movimiento de partículas en un cuadrado y no mencionaba otras aplicaciones. En 1970, W. Keith Hastings generalizó el algoritmo de Metropolis. Sin embargo, la metodología siguió siendo ignorada en el ámbito estadístico debido a la poca disponibilidad de los recursos computacionales necesarios para explotarlo \citep{bertsch}. Fue hasta después de la publicación de Gelfand y Smith que el muestreador de Gibbs fue identificado como un caso especial del algoritmo de Metropolis-Hastings. Hastings no supo de la gran importancia que tuvo su trabajo hasta después de su retiro en 1992, más de veinte años después de publicarlo \citep{bertsch}.
+Antes de que Gelfand y Smith introdujeran el muestreador de Gibbs a la comunidad estadística, químicos y físicos ya estaban utilizando métodos de Monte Carlo en experimentos. En 1953, Nicholas Metropolis publicó un artículo en el que introdujo su algoritmo. Este artículo solamente trataba sobre el movimiento de partículas en un cuadrado y no mencionaba otras aplicaciones. En 1970, W. Keith Hastings generalizó el algoritmo de Metropolis. Sin embargo, la metodología siguió siendo ignorada en el ámbito estadístico debido a la poca disponibilidad de los recursos computacionales necesarios para explotarlo \citep{bertsch}. Fue hasta después de la publicación de Gelfand y Smith que el muestreador de Gibbs fue identificado como un caso especial del algoritmo de Metropolis-Hastings. Hastings no supo de la gran importancia que tuvo su trabajo hasta después de su retiro en 1992, más de veinte años después de publicarlo.
 
 La idea general del algoritmo de Metropolis-Hastings es parecida a los métodos de aceptación y rechazo de la sección \ref{aceptacion}, en el sentido de que se generan observaciones de una distribución candidata y con cierta probabilidad estas observaciones son aceptadas o no. Se busca crear una cadena de Markov ergódica cuya distribución estacionaria sea la densidad de interés. A continuación se muestra cómo crear esta cadena.
 
@@ -1246,21 +1226,21 @@ donde $\rho(x, y)$ es la razón de Hastings definida como $$\rho(x, y) = \frac{f
 \begin{equation}
 \label{eq:mh}
 X^{(t+1)} = \begin{cases} 
-      y & \text{con probabilidad } \alpha(x^{(t)}, y)\\
-      x^{(t)} & \text{con probabilidad } 1-\alpha(x^{(t)}, y)
-   \end{cases}.
+      y & \text{con probabilidad } \alpha(x^{(t)}, y),\\
+      x^{(t)} & \text{con probabilidad } 1-\alpha(x^{(t)}, y).
+   \end{cases}
 \end{equation}
 
 Es importante notar que, en teoría, este algoritmo funciona para cualquier distribución candidata $q$, siempre y cuando esta densidad explore todo el soporte de la densidad de interés. Esto significa que no se necesita satisfacer la condición del método de aceptación y rechazo de encontrar una cota $M$ para el cociente de las densidades. Sin embargo, en la práctica la selección de $q$ va a impactar de manera importante la efectividad de las simulaciones, por lo que a continuación se estudian algunas maneras de elegir esta distribución candidata.
 
 Una manera de elegir la distribución candidata es hacerla independiente del valor de la cadena $x^{(t)}$, es decir, $q(y|x) = g(y)$. De esta manera, la razón de Hastings se simplifica a $$\rho (x, y) = \frac{f(y)g(x)}{f(x)g(y)}.$$ Sin embargo, \citet{casella} señalan que este tipo de propuestas son imprácticas debido a la dificultad de crear propuestas adecuadas en algunos contextos. Los mismos autores sugieren explorar vecindades del valor de la cadena en la iteración anterior para ir descubriendo paso a paso las propiedades de la distribución objetivo.
 
-Una manera de explorar estas vecindades es utilizando caminatas aleatorias de la forma $y = x^{(t)} + \epsilon$. Si la distribución de $\epsilon$ es simétrica, esto es que $f_{\epsilon} = f_{-\epsilon}$, entonces se cumple que $q(y|x) = q(x|y)$ y la razón de Hastings es simplemente $$\rho (x, y) = \frac{f(y)}{f(x)}.$$ El caso de estas propuestas simétricas fue el estudiado originalmente por Metropolis en 1953 \citep{gelman}. A veces se utiliza el nombre de algoritmo de Metropolis para indicar este tipo de distribuciones candidatas. Note el lector que si la caminata aleatoria no es simétrica, entonces se debe incorporar el cociente de la densidad candidata a la razón de Hastings.
+Una manera de explorar estas vecindades es utilizando caminatas aleatorias de la forma $y = x^{(t)} + \epsilon$. Si la distribución de $\epsilon$ es simétrica, esto es que $f_{\epsilon} = f_{-\epsilon}$, entonces se cumple que $q(y|x) = q(x|y)$ y la razón de Hastings es simplemente $$\rho (x, y) = \frac{f(y)}{f(x)}.$$ El caso de estas propuestas simétricas fue el estudiado originalmente por Metropolis en 1953 \citep{gelman}. A veces se utiliza el nombre de algoritmo de Metropolis para indicar este tipo de distribuciones candidatas. Nótese que si la caminata aleatoria no es simétrica, entonces se debe incorporar el cociente de la densidad candidata a la razón de Hastings.
 
 Ya que se introdujeron las propiedades del algoritmo de Metropolis-Hastings, se explica ahora por qué el muestreador de Gibbs es un caso especial de éste. Imagínese el lector que la iteración $t$ del algoritmo de Metropolis-Hastings es una serie de $p$ pasos, donde cada uno corresponde a un subvector $\theta_i$ de $\theta$. El $i$-ésimo paso de la iteración $t$ solamente mueve el subvector $\theta_i$ utilizando la densidad condicional de $\theta_i | \theta^{(t-1)}_{-i}$ \citep{gelman}:
 $$q_i(\theta^* | \theta^{(t-1)}) = \begin{cases}
-f_{\theta_i | \theta_{-i}^{(t-1)}} (\theta^*_{i}) & \text{si } \theta^*_{-i} = \theta^{(t-1)}_{-i}\\
-0 & \text{en otro caso} \end{cases}.$$ De esta forma, la razón de Hastings es
+f_{\theta_i | \theta_{-i}^{(t-1)}} (\theta^*_{i}) & \text{si } \theta^*_{-i} = \theta^{(t-1)}_{-i},\\
+0 & \text{en otro caso.} \end{cases}$$ De esta forma, la razón de Hastings es
 \begin{align*}
 \rho(\theta^{(t-1)}, \theta^*) &= \frac{f(\theta^*) \ q_i(\theta^{(t-1)}|\theta^*)}{f(\theta^{(t-1)}) \ q_i(\theta^*|\theta^{(t-1)})}\\
 &= \frac{f(\theta^*) \ f_{\theta_i|\theta_{-i}^{(t-1)}}(\theta^{(t-1)})}{f(\theta^{(t-1)}) \ f_{\theta_i|\theta_{-i}^{(t-1)}}(\theta^*)}\\
@@ -1344,7 +1324,7 @@ Respecto a la precisión y estabilidad de las cantidades estimadas, es muy impor
 
 Finalmente, es recomendable que las simulaciones sean lo más eficientes posible. Es decir, que se tenga la mayor cantidad de información en el menor tiempo. Esto se puede lograr explorando distintas opciones al seleccionar algoritmos y distribuciones candidatas, al igual que realizando simulaciones en paralelo y explotando al máximo los recursos computacionales disponibles.
 
-Antes de cerrar este capítulo, sepa el lector que distintos algoritmos de MCMC, además del muestreador de Gibbs y Metropolis-Hastings, se han desarrollado y son cada vez más comunes en la comunidad estadística. Especialmente hay que resaltar los algoritmos de Monte Carlo Hamiltoniano, los cuales utilizan nociones físicas y de sistemas dinámicos para explorar de manera eficiente las distribuciones. Estos métodos son especialmente útiles en grandes dimensiones porque incorporan información de la geometría de la distribución. El uso de Monte Carlo Hamiltoniano ha ido en aumento en gran parte gracias al software Stan \citep{stan}, el cual implementa este algoritmo y cuenta con interfaces para algunos de los lenguajes de programación más populares como R y Python. El interesado lector puede consultar más sobre Monte Carlo Hamiltoniano en \citet{neal}, \citet{betancourt} y \citet{gelman}. Para mayor información sobre Stan se recomienda consultar \citet{gelman}, \citet{kruschke} y el sitio web del software\footnote{ \url{https://mc-stan.org}} que contiene manuales e información de libre acceso. También es importante mencionar 
+Antes de cerrar este capítulo, es importante comentar que distintos algoritmos de MCMC, además del muestreador de Gibbs y Metropolis-Hastings, se han desarrollado y son cada vez más comunes en la comunidad estadística. Especialmente hay que resaltar los algoritmos de Monte Carlo Hamiltoniano, los cuales utilizan nociones físicas y de sistemas dinámicos para explorar de manera eficiente las distribuciones. Estos métodos son especialmente útiles en grandes dimensiones porque incorporan información de la geometría de la distribución. El uso de Monte Carlo Hamiltoniano ha ido en aumento en gran parte gracias al software Stan \citep{stan}, el cual implementa este algoritmo y cuenta con interfaces para algunos de los lenguajes de programación más populares como R y Python. Se puede consultar más sobre Monte Carlo Hamiltoniano en \citet{neal}, \citet{betancourt} y \citet{gelman}. Para mayor información sobre el software Stan se recomienda consultar \citet{gelman}, \citet{kruschke} y el sitio web del software\footnote{ \url{https://mc-stan.org}} que contiene manuales e información de libre acceso. También es importante mencionar 
 que la mayoría (si no es que todos) los diagnósticos mencionados para simulaciones de MCMC están disponibles en el paquete \texttt{coda} de R \citep{coda}.
 
 \newpage
@@ -1422,12 +1402,7 @@ c(u, v) &= \frac{\partial^2C}{\partial v \partial u}\nonumber\\
 \end{align}
 donde $E_m$ es el valor esperado con respecto a la distribución $m(\omega_1, \omega_2)$. El desarrollo de esta expresión se puede encontrar en el apéndice \ref{sec_densidad_copula_modelo}.
 
-Se recuerdan al lector las expresiones de la tau de Kendall y la rho de Spearman para una cópula $C$:
-\begin{itemize}
-\item $\uptau_{C} = 4\int_{0}^1\int_{0}^1C(u, v) \ dC(u, v) - 1,$
-\item $\rho_{C} = 12\int_0^1 \int_0^1 C(u, v) \ dudv-3.$
-\end{itemize}
-Se pueden reescribir estas integrales como valores esperados y utilizar integración Monte Carlo para aproximarlas:
+Las integrales en las expresiones de la tau de Kendall (proposición \ref{prop:kendall}) y la rho de Spearman (ecuación \eqref{volumen})  para una cópula $C$ se pueden reescribir como valores esperados y utilizar integración Monte Carlo para aproximarlas:
 \begin{equation} \label{tau_esperado}
 \uptau_{C} = 4 \ E_{(U, V)}\left[C(u, v) c(u, v)\right] -1,
 \end{equation}
@@ -2223,7 +2198,22 @@ Finalmente, se analizan las simulaciones del parámetro $\theta$. Siguiendo las 
     \label{fig:theta}
 \end{figure}
 
-Se podrían realizar diagnósticos para todos los parámetros involucrados en el modelo. Sin embargo, lo presentado en esta sección basta para ejemplificar el modelo de \citet{nieto} y su implementación a través del paquete \texttt{BGPhazard} \citep{bgphazard}. Para mayor información se recomienda consultar la documentación de las funciones con el comando \texttt{help()} o `\texttt{?}'.
+Se podrían realizar diagnósticos para todos los parámetros involucrados en el modelo. Sin embargo, lo presentado en esta sección basta para ejemplificar el modelo de \citet{nieto} y su implementación.
+
+\clearpage
+\newpage
+
+\subsection{Contribución al paquete \texttt{BGPhazard}}
+
+Para cerrar este capítulo se habla un poco sobre las aportaciones que se hicieron al paquete \texttt{BGPhazard} de \citet{bgphazard}. Para crear o contribuir a un paquete no solamente se tienen que programar las funciones, además se debe documentar correctamente el paquete y cada una de las funciones, crear pruebas automatizadas para probar que todo funciona como debe y asegurarse de que los mensajes de error que arroja el paquete sean informativos para el usuario. La documentación completa de las funciones se puede consultar en CRAN\footnote{\url{https://cran.r-project.org/web/packages/BGPhazard/index.html}} o en R con el comando \texttt{help()} o `\texttt{?}'. Las funciones que se añadieron a \texttt{BGPhazard} fueron las siguientes:
+
+\begin{itemize}
+\item \texttt{BSBInit.} Se utiliza para leer tablas o vectores de datos. Extrae los tiempos de falla, indicadores de censura y variables explicativas, crea la partición del espacio de tiempo y se especifican los parámetros $\alpha$, $\beta$ y $c$ de la sección \ref{sec:ini_post}.
+\item \texttt{BSBHaz.} Se utiliza para obtener simulaciones de la distribución posterior de los parámetros utilizando el muestreador de GIbbs. Se pueden modificar los intervalos de las caminatas aleatorias para parámetros que se simulan con el algoritmo de Metrópolis-Hastings.
+\item \texttt{BSBPlotSumm.} Se utiliza para graficar el valor esperado y un intervalo de 0.95 de probabilidad de las tasas de riesgo $(\lambda_1, \lambda_2)$ y las funciones de supervivencia $(S_1, S_2)$.
+\item \texttt{BSBPlotDiag.} Se utiliza para graficar los diagnósticos (traza y convergencia de los valores esperados) de las observaciones simuladas con la función \texttt{BSBHaz.} 
+\item \texttt{BSBSumm.} Se utiliza para obtener una tabla con los valores esperados y los extremos de un intervalo de 0.95 de probabilidad para $\omega_j, \lambda_j, S_j, \gamma$ y $\theta$ $(j\in \lbrace 1, 2 \rbrace)$.
+\end{itemize}
 
 \clearpage
 \newpage
