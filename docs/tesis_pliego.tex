@@ -318,7 +318,7 @@ Antes de ajustar el modelo se debe checar que se cumple la hipótesis de riesgos
 S_1(t) = S_0(t) ^ {\exp (\beta)} &\implies \log (S_1(t)) = e^\beta \ \log (S_0(t))\\
 &\implies \log (-\log (S_1(t))) = \beta + \log (-\log (S_0(t))).
 \end{align*}
-Es decir, que si se grafican las funciones $\log (-\log (S_1(t)))$ y $\log (-\log (S_0(t)))$ contra $t$ o $\log (t)$, bajo el supuesto de riesgos proporcionales se deben ver dos líneas paralelas, separadas por $\beta$. La figura \ref{fig:coxph} presenta esta gráfica utilizando los estimadores Kaplan-Meier de la sección \ref{sec:truncados}.
+Si se grafican las funciones $\log (-\log (S_1(t)))$ y $\log (-\log (S_0(t)))$ contra $t$ o $\log (t)$, bajo el supuesto de riesgos proporcionales se deben ver dos líneas paralelas, separadas por $\beta$. La figura \ref{fig:coxph} presenta esta gráfica utilizando los estimadores Kaplan-Meier de la sección \ref{sec:truncados}.
 
 \begin{figure}[htb]
 \centering\includegraphics[width=10cm]{prop_haz_km.png}
@@ -1400,7 +1400,7 @@ c(u, v) &= \frac{\partial^2C}{\partial v \partial u}\nonumber\\
 &= E_{m} \left[\frac{\mathbb{I}\lbrace u < 1-e^{-\omega_1}\rbrace \mathbb{I}\lbrace v < 1-e^{-\omega_2} \rbrace}{(1-u)(1-v)\omega_1\omega_2}\right],
 \label{eq:densidad_copula}
 \end{align}
-donde $E_m$ es el valor esperado con respecto a la distribución $m(\omega_1, \omega_2)$. El desarrollo de esta expresión se puede encontrar en el apéndice \ref{sec_densidad_copula_modelo}.
+donde $E_m$ es el valor esperado con respecto a la distribución $m$. El desarrollo de esta expresión se puede encontrar en el apéndice \ref{sec_densidad_copula_modelo}.
 
 Las integrales en las expresiones de la tau de Kendall (proposición \ref{prop:kendall}) y la rho de Spearman (ecuación \eqref{volumen})  para una cópula $C$ se pueden reescribir como valores esperados y utilizar integración Monte Carlo para aproximarlas:
 \begin{equation} \label{tau_esperado}
